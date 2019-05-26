@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <sstream>
+#include "Tilemap.h"
 #include "GameState.h"
 #include "Utils.h"
 
@@ -34,6 +36,17 @@ int main() {
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	*/
 
+	GameState state(Difficulty::very_hard);
+	Vector2u size = state.getSize();
+	Texture tileset;
+	tileset.loadFromFile("../../assets/tilemap.png");
+
+	Tilemap fgTilemap(tileset, size, 16, 16, Vector2f(4, 0));
+	Tilemap bgTilemap(tileset, size, 16, 16, (Vector2f)Tile::bgPos);
+
+
+	FPS fpsCounter;
+
 	// Window loop
 	while (window.isOpen()) {
 		Event event;
@@ -50,9 +63,19 @@ int main() {
 			}
 		}
 
-		window.clear();
+		window.clear(Color::White);
+
+		window.draw(bgTilemap);
+		window.draw(fgTilemap);
 
 		window.display();
+
+		fpsCounter.update();
+		std::ostringstream ss;
+		ss << "FPS: " << fpsCounter.getFPS();
+
+		window.setTitle(ss.str());
+
 	}
 
 	return EXIT_SUCCESS;

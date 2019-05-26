@@ -1,3 +1,5 @@
+#pragma once
+
 #include <SFML/System/Vector2.hpp>
 #include <vector>
 
@@ -7,17 +9,29 @@ using sf::Vector2u;
 using std::vector;
 
 enum class TileState {
+	revealed,
 	hidden,
-	revealed
+	flagged
 };
 
+enum class TileType {
+	empty,
+	mine
+};
 
 class Tile {
 protected:
-	const ushort id;
+	Vector2u tilesetPos;
 	TileState state;
+	TileType type;
 public:
-	Tile(ushort id);
+	const static Vector2u fgPos;
+	const static Vector2u bgPos;
+
+	Tile(Vector2u tilesetPos);
+	Tile(ushort x, ushort y);
+	Vector2u getPos() const;
+	TileType getType() const;
 	virtual void clickedOn() = 0;
 };
 
@@ -27,12 +41,13 @@ private:
 public:
 	EmptyTile();
 	virtual void clickedOn();
-	void findMines(Vector2u pos, vector<vector<Tile>>& board);
+	//void findMines(Vector2u pos, vector<vector<Tile>>& board);
 };
 
 class Mine : public Tile {
 public:
 	Mine();
+	virtual void clickedOn();
 };
 
 

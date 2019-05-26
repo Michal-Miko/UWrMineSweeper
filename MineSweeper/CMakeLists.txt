@@ -28,6 +28,7 @@ set(
 	${SRCROOT}/Main.cpp
 	${SRCROOT}/Gamestate.cpp ${SRCROOT}/Gamestate.h
 	${SRCROOT}/Tiles.cpp ${SRCROOT}/Tiles.h
+	${SRCROOT}/Tilemap.cpp ${SRCROOT}/Tilemap.h
 	${SRCROOT}/Utils.cpp ${SRCROOT}/Utils.h
 )
 

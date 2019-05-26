@@ -6,12 +6,18 @@ typedef unsigned short ushort;
 using sf::Vector2u;
 using std::vector;
 
+enum class TileState {
+	hidden,
+	revealed
+};
+
+
 class Tile {
 protected:
-	ushort id;
-	short state;
+	const ushort id;
+	TileState state;
 public:
-	Tile();
+	Tile(ushort id);
 	virtual void clickedOn() = 0;
 };
 
@@ -20,6 +26,7 @@ private:
 	ushort nearbyMines;
 public:
 	EmptyTile();
+	virtual void clickedOn();
 	void findMines(Vector2u pos, vector<vector<Tile>>& board);
 };
 

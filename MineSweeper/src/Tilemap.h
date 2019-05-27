@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <iostream>
 #include "Tiles.h"
 
 using sf::Drawable;
@@ -21,15 +22,14 @@ private:
 	Vector2u size;
 	float textureDim;
 	float renderDim;
-
-	void addTileVertices(Vector2f texPos, Vector2f pos);
-
 public:
+	Tilemap();
 	Tilemap(
 		Texture tileset, Vector2u size,
 		float textureDim, float renderDim,
 		Vector2f texPos
 	);
 
+	void changeTile(Vector2u tilePos, Vector2f newTexPos);
 	virtual void draw(RenderTarget& target, RenderStates states) const override;
 };

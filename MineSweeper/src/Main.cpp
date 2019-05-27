@@ -17,7 +17,7 @@ using namespace sf;
 ///
 ////////////////////////////////////////////////////////////
 int main() {
-	Vector2u winSize(800, 800);
+	Vector2u winSize(20 * 20, 36 * 20);
 
 	// paths
 	string assets = "../../game/assets/";
@@ -36,14 +36,12 @@ int main() {
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	*/
 
-	GameState state(Difficulty::very_hard);
+	GameState state("../../assets/", GDifficulty::veryHard);
 	Vector2u size = state.getSize();
-	Texture tileset;
-	tileset.loadFromFile("../../assets/tilemap.png");
+	window.setSize(Vector2u(size.x * 20, size.y * 20));
 
-	Tilemap fgTilemap(tileset, size, 16, 16, Vector2f(4, 0));
-	Tilemap bgTilemap(tileset, size, 16, 16, (Vector2f)Tile::bgPos);
-
+	View view(FloatRect(0, 0, size.x * 16, size.y * 16));
+	window.setView(view);
 
 	FPS fpsCounter;
 
@@ -61,12 +59,20 @@ int main() {
 				std::cout << "Window resized:\n";
 				std::printf("[%u,%u] => [%u,%u])\n", winSize.x, winSize.y, window.getSize().x, window.getSize().y);
 			}
+
+			if (event.type == Event::KeyPressed)
+				if (event.key.code == sf::Keyboard::R)
+					state.reset();
+
+
+			if (state.getGState() == GState::running)
+				state.handleEvents(event, window);
 		}
 
 		window.clear(Color::White);
 
-		window.draw(bgTilemap);
-		window.draw(fgTilemap);
+		window.draw(state.getBG());
+		window.draw(state.getFG());
 
 		window.display();
 

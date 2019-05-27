@@ -36,7 +36,7 @@ int main() {
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	*/
 
-	GameState state("../../assets/", GDifficulty::veryHard);
+	MineSweeper state("../../assets/", GDifficulty::veryHard);
 	Vector2u size = state.getSize();
 	window.setSize(Vector2u(size.x * 20, size.y * 20));
 

@@ -12,7 +12,7 @@
 
 # =============================================================================
 # Project: MineSweeper
-# Configuration: Debug
+# Configuration: Release
 # =============================================================================
 
 #############################################
@@ -34,7 +34,7 @@ include rules.ninja
 # Utility command for rebuild_cache
 
 build CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D D:\Dev\Studia\Github\Michal-Miko\UWrMineSweeper\MineSweeper\build\x64-Debug && "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -HD:\Dev\Studia\Github\Michal-Miko\UWrMineSweeper\MineSweeper -BD:\Dev\Studia\Github\Michal-Miko\UWrMineSweeper\MineSweeper\build\x64-Debug"
+  COMMAND = cmd.exe /C "cd /D D:\Dev\Studia\Github\Michal-Miko\UWrMineSweeper\MineSweeper\build\x64-Release && "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -HD:\Dev\Studia\Github\Michal-Miko\UWrMineSweeper\MineSweeper -BD:\Dev\Studia\Github\Michal-Miko\UWrMineSweeper\MineSweeper\build\x64-Release"
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
@@ -48,42 +48,42 @@ build rebuild_cache: phony CMakeFiles\rebuild_cache.util
 
 build cmake_object_order_depends_target_MineSweeper: phony || CMakeFiles\MineSweeper.dir
 build CMakeFiles\MineSweeper.dir\src\Main.cpp.obj: CXX_COMPILER__MineSweeper ..\..\src\Main.cpp || cmake_object_order_depends_target_MineSweeper
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG
   INCLUDES = -I..\..\extlibs\SFML-2.5.1\include -I..\..\extlibs\TGUI-0.8\include
   OBJECT_DIR = CMakeFiles\MineSweeper.dir
   OBJECT_FILE_DIR = CMakeFiles\MineSweeper.dir\src
   TARGET_COMPILE_PDB = CMakeFiles\MineSweeper.dir\
   TARGET_PDB = MineSweeper.pdb
 build CMakeFiles\MineSweeper.dir\src\MineSweeper.cpp.obj: CXX_COMPILER__MineSweeper ..\..\src\MineSweeper.cpp || cmake_object_order_depends_target_MineSweeper
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG
   INCLUDES = -I..\..\extlibs\SFML-2.5.1\include -I..\..\extlibs\TGUI-0.8\include
   OBJECT_DIR = CMakeFiles\MineSweeper.dir
   OBJECT_FILE_DIR = CMakeFiles\MineSweeper.dir\src
   TARGET_COMPILE_PDB = CMakeFiles\MineSweeper.dir\
   TARGET_PDB = MineSweeper.pdb
 build CMakeFiles\MineSweeper.dir\src\Gui.cpp.obj: CXX_COMPILER__MineSweeper ..\..\src\Gui.cpp || cmake_object_order_depends_target_MineSweeper
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG
   INCLUDES = -I..\..\extlibs\SFML-2.5.1\include -I..\..\extlibs\TGUI-0.8\include
   OBJECT_DIR = CMakeFiles\MineSweeper.dir
   OBJECT_FILE_DIR = CMakeFiles\MineSweeper.dir\src
   TARGET_COMPILE_PDB = CMakeFiles\MineSweeper.dir\
   TARGET_PDB = MineSweeper.pdb
 build CMakeFiles\MineSweeper.dir\src\Tiles.cpp.obj: CXX_COMPILER__MineSweeper ..\..\src\Tiles.cpp || cmake_object_order_depends_target_MineSweeper
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG
   INCLUDES = -I..\..\extlibs\SFML-2.5.1\include -I..\..\extlibs\TGUI-0.8\include
   OBJECT_DIR = CMakeFiles\MineSweeper.dir
   OBJECT_FILE_DIR = CMakeFiles\MineSweeper.dir\src
   TARGET_COMPILE_PDB = CMakeFiles\MineSweeper.dir\
   TARGET_PDB = MineSweeper.pdb
 build CMakeFiles\MineSweeper.dir\src\Tilemap.cpp.obj: CXX_COMPILER__MineSweeper ..\..\src\Tilemap.cpp || cmake_object_order_depends_target_MineSweeper
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG
   INCLUDES = -I..\..\extlibs\SFML-2.5.1\include -I..\..\extlibs\TGUI-0.8\include
   OBJECT_DIR = CMakeFiles\MineSweeper.dir
   OBJECT_FILE_DIR = CMakeFiles\MineSweeper.dir\src
   TARGET_COMPILE_PDB = CMakeFiles\MineSweeper.dir\
   TARGET_PDB = MineSweeper.pdb
 build CMakeFiles\MineSweeper.dir\src\Utils.cpp.obj: CXX_COMPILER__MineSweeper ..\..\src\Utils.cpp || cmake_object_order_depends_target_MineSweeper
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG
   INCLUDES = -I..\..\extlibs\SFML-2.5.1\include -I..\..\extlibs\TGUI-0.8\include
   OBJECT_DIR = CMakeFiles\MineSweeper.dir
   OBJECT_FILE_DIR = CMakeFiles\MineSweeper.dir\src
@@ -97,10 +97,10 @@ build CMakeFiles\MineSweeper.dir\src\Utils.cpp.obj: CXX_COMPILER__MineSweeper ..
 #############################################
 # Link the executable MineSweeper.exe
 
-build MineSweeper.exe: CXX_EXECUTABLE_LINKER__MineSweeper CMakeFiles\MineSweeper.dir\src\Main.cpp.obj CMakeFiles\MineSweeper.dir\src\MineSweeper.cpp.obj CMakeFiles\MineSweeper.dir\src\Gui.cpp.obj CMakeFiles\MineSweeper.dir\src\Tiles.cpp.obj CMakeFiles\MineSweeper.dir\src\Tilemap.cpp.obj CMakeFiles\MineSweeper.dir\src\Utils.cpp.obj | ..\..\extlibs\SFML-2.5.1\lib\sfml-graphics-d.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-main-d.lib ..\..\extlibs\TGUI-0.8\lib\tgui-d.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-window-d.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-system-d.lib
-  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
-  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
-  LINK_LIBRARIES = ..\..\extlibs\SFML-2.5.1\lib\sfml-graphics-d.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-main-d.lib ..\..\extlibs\TGUI-0.8\lib\tgui-d.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-window-d.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-system-d.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+build MineSweeper.exe: CXX_EXECUTABLE_LINKER__MineSweeper CMakeFiles\MineSweeper.dir\src\Main.cpp.obj CMakeFiles\MineSweeper.dir\src\MineSweeper.cpp.obj CMakeFiles\MineSweeper.dir\src\Gui.cpp.obj CMakeFiles\MineSweeper.dir\src\Tiles.cpp.obj CMakeFiles\MineSweeper.dir\src\Tilemap.cpp.obj CMakeFiles\MineSweeper.dir\src\Utils.cpp.obj | ..\..\extlibs\SFML-2.5.1\lib\sfml-graphics.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-main.lib ..\..\extlibs\TGUI-0.8\lib\tgui.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-window.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-system.lib
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG
+  LINK_FLAGS = /machine:x64 /INCREMENTAL:NO /subsystem:windows
+  LINK_LIBRARIES = ..\..\extlibs\SFML-2.5.1\lib\sfml-graphics.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-main.lib ..\..\extlibs\TGUI-0.8\lib\tgui.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-window.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-system.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
   OBJECT_DIR = CMakeFiles\MineSweeper.dir
   POST_BUILD = cd .
   PRE_LINK = cd .
@@ -113,7 +113,7 @@ build MineSweeper.exe: CXX_EXECUTABLE_LINKER__MineSweeper CMakeFiles\MineSweeper
 # Utility command for edit_cache
 
 build CMakeFiles\edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D D:\Dev\Studia\Github\Michal-Miko\UWrMineSweeper\MineSweeper\build\x64-Debug && "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
+  COMMAND = cmd.exe /C "cd /D D:\Dev\Studia\Github\Michal-Miko\UWrMineSweeper\MineSweeper\build\x64-Release && "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E echo "No interactive CMake dialog available.""
   DESC = No interactive CMake dialog available...
   restat = 1
 build edit_cache: phony CMakeFiles\edit_cache.util

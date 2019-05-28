@@ -57,6 +57,14 @@ Renderer.2 {
 }
 
 Renderer.3 {
+    backgroundcolor = transparent;
+    bordercolor = white;
+    borders = (0, 0, 0, 0);
+    textcolor = white;
+    textstyle = Bold;
+}
+
+Renderer.4 {
     textcolor = rgba(255, 255, 255, 215);
 
     scrollbar {
@@ -71,7 +79,7 @@ Renderer.3 {
     }
 }
 
-Renderer.4 {
+Renderer.5 {
     backgroundcolor = rgba(180, 180, 180, 215);
     backgroundcolordown = rgba(150, 150, 150, 215);
     backgroundcolorhover = rgba(190, 190, 190, 215);
@@ -85,14 +93,6 @@ Renderer.4 {
     texturedown = None;
     texturefocused = None;
     texturehover = None;
-}
-
-Renderer.5 {
-    backgroundcolor = transparent;
-    bordercolor = white;
-    borders = (0, 0, 0, 0);
-    textcolor = white;
-    textstyle = Bold;
 }
 
 Panel.TopPanel {
@@ -109,7 +109,7 @@ Panel.TopPanel {
         Text = "Time:";
         TextSize = 12;
         VerticalAlignment = Center;
-        renderer = &5;
+        renderer = &3;
     }
 
     Label.Time {
@@ -119,7 +119,7 @@ Panel.TopPanel {
         Text = 0;
         TextSize = 12;
         VerticalAlignment = Center;
-        renderer = &5;
+        renderer = &3;
     }
 
     Button.Reset {
@@ -127,7 +127,7 @@ Panel.TopPanel {
         Size = (50, 50%);
         Text = Reset;
         TextSize = 12;
-        renderer = &4;
+        renderer = &5;
     }
 
     Label.LabelMines {
@@ -137,7 +137,7 @@ Panel.TopPanel {
         Text = "Flagged mines:";
         TextSize = 12;
         VerticalAlignment = Center;
-        renderer = &5;
+        renderer = &3;
     }
 
     Label.Mines {
@@ -147,7 +147,7 @@ Panel.TopPanel {
         Text = 0;
         TextSize = 12;
         VerticalAlignment = Center;
-        renderer = &5;
+        renderer = &3;
     }
 
     Button.OpenSettings {
@@ -155,7 +155,7 @@ Panel.TopPanel {
         Size = (60, 50%);
         Text = Settings;
         TextSize = 12;
-        renderer = &4;
+        renderer = &5;
     }
 }
 
@@ -223,7 +223,7 @@ textcolorhover = rgba(255, 255, 255, 235);
             Size = (20%, 60%);
             Text = OK;
             TextSize = 13;
-            renderer = &4;
+            renderer = &5;
         }
 
         Button.Cancel {
@@ -231,7 +231,7 @@ textcolorhover = rgba(255, 255, 255, 235);
             Size = (30%, 60%);
             Text = Cancel;
             TextSize = 13;
-            renderer = &4;
+            renderer = &5;
         }
 
         Button.Apply {
@@ -239,7 +239,7 @@ textcolorhover = rgba(255, 255, 255, 235);
             Size = (30%, 60%);
             Text = Apply;
             TextSize = 13;
-            renderer = &4;
+            renderer = &5;
         }
     }
 
@@ -258,7 +258,7 @@ textcolorhover = rgba(255, 255, 255, 235);
             Size = (58, 17);
             Text = "Difficulty:";
             TextSize = 12;
-            renderer = &3;
+            renderer = &4;
         }
 
         ComboBox.Difficulty {
@@ -280,7 +280,7 @@ textcolorhover = rgba(255, 255, 255, 235);
             Size = (48, 17);
             Text = "Theme:";
             TextSize = 12;
-            renderer = &3;
+            renderer = &4;
         }
 
         ComboBox.Theme {
@@ -431,9 +431,9 @@ textcolorhover = rgba(255, 255, 255, 235);
             ScrollbarPolicy = Never;
             Size = (50%, 100%);
             Text = "Time:";
-            TextSize = 26;
+            TextSize = 20;
             VerticalAlignment = Center;
-            renderer = &3;
+            renderer = &4;
         }
 
         Label.Score {
@@ -441,9 +441,9 @@ textcolorhover = rgba(255, 255, 255, 235);
             ScrollbarPolicy = Never;
             Size = (50%, 100%);
             Text = 0;
-            TextSize = 26;
+            TextSize = 20;
             VerticalAlignment = Center;
-            renderer = &3;
+            renderer = &4;
         }
     }
 

@@ -197,8 +197,8 @@ void Gui::update() {
 void Gui::resize() {
 	Vector2u size = state->getSize();
 
-	if (winSize.y % size.y != 0)
-		winSize.y -= winSize.y % size.y;
+	if ((winSize.y - 40) % size.y != 0)
+		winSize.y -= (winSize.y - 40) % size.y;
 
 	float w = winSize.x / (float)size.x;
 	float h = (winSize.y - 40) / (float)size.y;

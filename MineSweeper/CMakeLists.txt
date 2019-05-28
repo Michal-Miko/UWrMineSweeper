@@ -11,7 +11,7 @@ set(LIBROOT ${PROJECT_SOURCE_DIR}/extlibs)
 
 # SFML
 set(SFML_DIR ${LIBROOT}/SFML-2.5.1/lib/cmake/SFML)
-find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
+find_package(SFML 2.5 COMPONENTS graphics main REQUIRED)
 
 # TGUI
 set(TGUI_DIR ${LIBROOT}/TGUI-0.8/lib/cmake/TGUI)
@@ -38,12 +38,22 @@ set(
 	${PROJECT_SOURCE_DIR}/properties.rc
 )
 
-add_executable (
-	MineSweeper 
-	${SOURCEFILES} 
-#	${RESOURCEFILES}
-	${RAPIDXML}
-)
+if (WIN32)
+	add_executable (
+		MineSweeper 
+		${SOURCEFILES} 
+		${RAPIDXML}
+	)
+endif (WIN32)
+
+if (UNIX)
+	add_executable (
+		MineSweeper 
+		X11
+		${SOURCEFILES} 
+		${RAPIDXML}
+	)
+endif (UNIX)
 
 # Link SFML, TGUI
-target_link_libraries(MineSweeper sfml-graphics tgui)
+target_link_libraries(MineSweeper sfml-graphics sfml-main tgui)

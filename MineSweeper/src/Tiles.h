@@ -24,7 +24,6 @@ enum class TState {
 	hidden,
 	flagged,
 	revealNearby,
-	update,
 	any
 };
 

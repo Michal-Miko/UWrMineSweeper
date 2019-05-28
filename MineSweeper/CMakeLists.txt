@@ -41,6 +41,7 @@ set(
 if (WIN32)
 	add_executable (
 		MineSweeper 
+		WIN32
 		${SOURCEFILES} 
 		${RAPIDXML}
 	)

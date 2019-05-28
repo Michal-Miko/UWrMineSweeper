@@ -12,8 +12,10 @@ void MineSweeper::updateTile(Tile* t) {
 			(Vector2f)tiles[y][x]->getTilesetPos()
 		);
 
-		if (tile->getType() == TType::mine)
+		if (tile->getType() == TType::mine) {
 			gState = GState::loss;
+			break;
+		}
 
 		if (tile->getNearbyMines() == 0) {
 			for (auto t : tile->getNeighbours())
@@ -193,13 +195,11 @@ void MineSweeper::revealMines() {
 				if (t->getState() == TState::hidden) {
 					t->clickedOn();
 					updateTile(t);
-					hiddenCount--;
 				}
 				else if (t->getState() == TState::flagged) {
 					t->flag();
 					t->clickedOn();
 					updateTile(t);
-					hiddenCount--;
 				}
 			}
 }

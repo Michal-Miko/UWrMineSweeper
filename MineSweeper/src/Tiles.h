@@ -12,7 +12,11 @@ enum class TTheme {
 	blue,
 	green,
 	black,
-	white
+	white,
+	yellow,
+	brown,
+	purple,
+	gray
 };
 
 enum class TState {

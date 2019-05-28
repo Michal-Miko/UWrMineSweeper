@@ -228,7 +228,7 @@ void MineSweeper::reset() {
 		break;
 	}
 
-	mineCount = size.x * size.y * (15 + (int)diff) / 100;
+	mineCount = size.x * size.y * (16 + (int)diff) / 100;
 
 	gState = GState::running;
 	hiddenCount = size.x*size.y;

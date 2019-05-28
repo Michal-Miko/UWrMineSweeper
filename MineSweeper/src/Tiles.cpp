@@ -7,8 +7,10 @@ const Vector2u Tile::bgPos = Vector2u(0, 1);
 
 void Tile::setTheme(TTheme theme) {
 	Tile::theme = theme;
-	fgPos.x = 2 * (int)theme;
-	flagPos.x = 2 * (int)theme + 1;
+	fgPos.x = 2 * ((int)theme % 4);
+	fgPos.y = ceil((int)theme / 4) + 2;
+	flagPos.x = fgPos.x + 1;
+	flagPos.y = ceil((int)theme / 4) + 2;
 }
 
 Tile::Tile(Vector2u tilesetPos) : tilesetPos(tilesetPos) {}

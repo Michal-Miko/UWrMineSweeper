@@ -8,11 +8,15 @@ void Gui::loadSettings() {
 	if (d == GDifficulty::custom) {
 		unsigned w, h;
 		std::istringstream iss;
-		iss.str(width->getText());
-		iss >> w;
-		iss.str(height->getText());
+		iss.str(width->getText().toAnsiString());
+		if (!(iss >> w))
+			w = 24;
+
+		iss.str(height->getText().toAnsiString());
 		iss.clear();
-		iss >> h;
+		if (!(iss >> h))
+			h = 30;
+
 		state->setSize(Vector2u(w, h));
 	}
 
@@ -72,7 +76,7 @@ Gui::Gui(MineSweeper * state, sf::RenderWindow* target, std::string guiPath) {
 		settings->setVisible(false);
 	});
 	difficulty->connect("itemselected", [&]() {
-		if (difficulty->getSelectedItem().toAnsiString() == "custom")
+		if (difficulty->getSelectedItemIndex() == (int)GDifficulty::custom)
 			customPanel->setVisible(true);
 		else customPanel->setVisible(false);
 	});

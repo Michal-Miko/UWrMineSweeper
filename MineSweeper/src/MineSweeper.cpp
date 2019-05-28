@@ -1,4 +1,4 @@
-#include "GameState.h"
+#include "MineSweeper.h"
 
 void MineSweeper::updateTile(Tile* t) {
 	unsigned x = t->getBoardPos().x;
@@ -11,22 +11,16 @@ void MineSweeper::updateTile(Tile* t) {
 			Vector2u(x, y),
 			(Vector2f)tiles[y][x]->getTilesetPos()
 		);
-		hiddenCount--;
-		if (tile->getType() == TType::mine) {
-			gState = GState::loss;
-			std::cout << "Loss\n";
-		}
 
-		if (hiddenCount == mineCount && gState == GState::running) {
-			gState = GState::victory;
-			std::cout << "Victory\n";
-		}
+		if (tile->getType() == TType::mine)
+			gState = GState::loss;
 
 		if (tile->getNearbyMines() == 0) {
 			for (auto t : tile->getNeighbours())
 				if (t->getState() == TState::hidden) {
 					t->clickedOn();
 					updateTile(t);
+					hiddenCount--;
 				}
 		}
 		break;
@@ -53,6 +47,7 @@ void MineSweeper::updateTile(Tile* t) {
 				if (t->getState() == TState::hidden) {
 					t->clickedOn();
 					updateTile(t);
+					hiddenCount--;
 				}
 		}
 	default:
@@ -105,18 +100,19 @@ void MineSweeper::addNeighbours(Tile* t) {
 	t->setNeighbours(neighbours);
 }
 
-MineSweeper::MineSweeper() {}
+MineSweeper::MineSweeper() {
+	rng = std::mt19937(dev());
+}
 
-MineSweeper::MineSweeper(std::string assets, GDifficulty diff = GDifficulty::medium) {
+MineSweeper::MineSweeper(std::string assets, GDifficulty diff = GDifficulty::medium) : MineSweeper() {
 	this->diff = diff;
 	this->assets = assets;
-
 
 	gState = GState::startup;
 	reset();
 }
 
-MineSweeper::MineSweeper(std::string assets, Vector2u customSize) {
+MineSweeper::MineSweeper(std::string assets, Vector2u customSize) : MineSweeper() {
 	this->diff = GDifficulty::custom;
 	this->assets = assets;
 	this->size = customSize;
@@ -127,29 +123,26 @@ MineSweeper::MineSweeper(std::string assets, Vector2u customSize) {
 	size = customSize;
 }
 
-void MineSweeper::handleEvents(const Event & event, const sf::Window & window) {
-	if (event.type == Event::MouseButtonPressed) {
-		// Position
-		unsigned mx = event.mouseButton.x;
-		unsigned my = event.mouseButton.y;
+void MineSweeper::clickOnTile(Vector2u pos, sf::Mouse::Button button) {
+	if (button == sf::Mouse::Left) {
+		if (tiles[pos.y][pos.x]->getState() == TState::hidden)
+			hiddenCount--;
+		tiles[pos.y][pos.x]->clickedOn();
+		updateTile(tiles[pos.y][pos.x]);
+	}
 
-		// Mapping to block pos
-		mx = (unsigned)map((float)mx, 0.0f, (float)window.getSize().x, 0.0f, (float)size.x);
-		my = (unsigned)map((float)my, 0.0f, (float)window.getSize().y, 0.0f, (float)size.y);
-
-		if (event.mouseButton.button == sf::Mouse::Left) {
-			tiles[my][mx]->clickedOn();
-			updateTile(tiles[my][mx]);
-		}
-		if (event.mouseButton.button == sf::Mouse::Right) {
-			tiles[my][mx]->flag();
-			updateTile(tiles[my][mx]);
-		}
+	if (button == sf::Mouse::Right) {
+		tiles[pos.y][pos.x]->flag();
+		updateTile(tiles[pos.y][pos.x]);
 	}
 }
 
-const Vector2u& MineSweeper::getSize() const {
+const Vector2u & MineSweeper::getSize() const {
 	return size;
+}
+
+void MineSweeper::setSize(Vector2u size) {
+	this->size = size;
 }
 
 const Tilemap & MineSweeper::getFG() const {
@@ -164,6 +157,53 @@ const GState & MineSweeper::getGState() const {
 	return gState;
 }
 
+void MineSweeper::setGState(GState state) {
+	gState = state;
+}
+
+GDifficulty MineSweeper::getDiff() const {
+	return diff;
+}
+
+void MineSweeper::setDiff(GDifficulty d) {
+	diff = d;
+}
+
+unsigned MineSweeper::getMineCount() {
+	return mineCount;
+}
+
+unsigned MineSweeper::getFlagCount() {
+	return flagCount;
+}
+
+sf::Time MineSweeper::getTimeElapsed() {
+	return clock.getElapsedTime();
+}
+
+void MineSweeper::checkVictory() {
+	if (hiddenCount == mineCount)
+		gState = GState::victory;
+}
+
+void MineSweeper::revealMines() {
+	for (auto v : tiles)
+		for (auto t : v)
+			if (t->getType() == TType::mine) {
+				if (t->getState() == TState::hidden) {
+					t->clickedOn();
+					updateTile(t);
+					hiddenCount--;
+				}
+				else if (t->getState() == TState::flagged) {
+					t->flag();
+					t->clickedOn();
+					updateTile(t);
+					hiddenCount--;
+				}
+			}
+}
+
 void MineSweeper::reset() {
 	if (gState != GState::startup)
 		for (auto v : tiles)
@@ -176,19 +216,19 @@ void MineSweeper::reset() {
 		size = Vector2u(8, 8);
 		break;
 	case GDifficulty::medium:
-		size = Vector2u(12, 21);
+		size = Vector2u(14, 18);
 		break;
 	case GDifficulty::hard:
-		size = Vector2u(16, 30);
+		size = Vector2u(20, 24);
 		break;
 	case GDifficulty::veryHard:
-		size = Vector2u(20, 36);
+		size = Vector2u(24, 30);
 	case GDifficulty::custom:
 	default:
 		break;
 	}
 
-	mineCount = size.x * size.y * 16 / 100;
+	mineCount = size.x * size.y * (18 + (int)diff) / 100;
 
 	gState = GState::running;
 	hiddenCount = size.x*size.y;
@@ -205,11 +245,11 @@ void MineSweeper::reset() {
 	std::uniform_int_distribution<unsigned> distVer(0, size.y - 1);
 	unsigned x, y;
 	for (unsigned i = 0; i < mineCount; i++) {
-		x = distHor(generator);
-		y = distVer(generator);
+		x = distHor(rng);
+		y = distVer(rng);
 		while (tiles[y][x]->getType() == TType::mine) {
-			x = distHor(generator);
-			y = distVer(generator);
+			x = distHor(rng);
+			y = distVer(rng);
 		}
 		tiles[y][x] = new Mine();
 	}
@@ -227,11 +267,15 @@ void MineSweeper::reset() {
 			if (t->getType() == TType::empty)
 				t->setNearbyMines(countNearby(t, TState::any, TType::mine));
 
+	flagCount = 0;
+
 	// Graphics
 	tileset.loadFromFile(assets + "tilemap.png");
-
 	fgTilemap = Tilemap(tileset, size, 16, 16, (Vector2f)Tile::fgPos);
 	bgTilemap = Tilemap(tileset, size, 16, 16, (Vector2f)Tile::bgPos);
+
+	// Clock
+	clock.restart();
 }
 
 MineSweeper::~MineSweeper() {

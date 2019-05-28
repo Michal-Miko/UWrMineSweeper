@@ -26,7 +26,8 @@ set(RAPIDXML
 set(
 	SOURCEFILES 
 	${SRCROOT}/Main.cpp
-	${SRCROOT}/Gamestate.cpp ${SRCROOT}/Gamestate.h
+	${SRCROOT}/MineSweeper.cpp ${SRCROOT}/MineSweeper.h
+	${SRCROOT}/Gui.cpp ${SRCROOT}/Gui.h
 	${SRCROOT}/Tiles.cpp ${SRCROOT}/Tiles.h
 	${SRCROOT}/Tilemap.cpp ${SRCROOT}/Tilemap.h
 	${SRCROOT}/Utils.cpp ${SRCROOT}/Utils.h

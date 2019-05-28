@@ -54,7 +54,14 @@ build CMakeFiles\MineSweeper.dir\src\Main.cpp.obj: CXX_COMPILER__MineSweeper ..\
   OBJECT_FILE_DIR = CMakeFiles\MineSweeper.dir\src
   TARGET_COMPILE_PDB = CMakeFiles\MineSweeper.dir\
   TARGET_PDB = MineSweeper.pdb
-build CMakeFiles\MineSweeper.dir\src\GameState.cpp.obj: CXX_COMPILER__MineSweeper ..\..\src\GameState.cpp || cmake_object_order_depends_target_MineSweeper
+build CMakeFiles\MineSweeper.dir\src\MineSweeper.cpp.obj: CXX_COMPILER__MineSweeper ..\..\src\MineSweeper.cpp || cmake_object_order_depends_target_MineSweeper
+  FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
+  INCLUDES = -I..\..\extlibs\SFML-2.5.1\include -I..\..\extlibs\TGUI-0.8\include
+  OBJECT_DIR = CMakeFiles\MineSweeper.dir
+  OBJECT_FILE_DIR = CMakeFiles\MineSweeper.dir\src
+  TARGET_COMPILE_PDB = CMakeFiles\MineSweeper.dir\
+  TARGET_PDB = MineSweeper.pdb
+build CMakeFiles\MineSweeper.dir\src\Gui.cpp.obj: CXX_COMPILER__MineSweeper ..\..\src\Gui.cpp || cmake_object_order_depends_target_MineSweeper
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
   INCLUDES = -I..\..\extlibs\SFML-2.5.1\include -I..\..\extlibs\TGUI-0.8\include
   OBJECT_DIR = CMakeFiles\MineSweeper.dir
@@ -90,7 +97,7 @@ build CMakeFiles\MineSweeper.dir\src\Utils.cpp.obj: CXX_COMPILER__MineSweeper ..
 #############################################
 # Link the executable MineSweeper.exe
 
-build MineSweeper.exe: CXX_EXECUTABLE_LINKER__MineSweeper CMakeFiles\MineSweeper.dir\src\Main.cpp.obj CMakeFiles\MineSweeper.dir\src\GameState.cpp.obj CMakeFiles\MineSweeper.dir\src\Tiles.cpp.obj CMakeFiles\MineSweeper.dir\src\Tilemap.cpp.obj CMakeFiles\MineSweeper.dir\src\Utils.cpp.obj | ..\..\extlibs\SFML-2.5.1\lib\sfml-graphics-d.lib ..\..\extlibs\TGUI-0.8\lib\tgui-d.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-window-d.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-system-d.lib
+build MineSweeper.exe: CXX_EXECUTABLE_LINKER__MineSweeper CMakeFiles\MineSweeper.dir\src\Main.cpp.obj CMakeFiles\MineSweeper.dir\src\MineSweeper.cpp.obj CMakeFiles\MineSweeper.dir\src\Gui.cpp.obj CMakeFiles\MineSweeper.dir\src\Tiles.cpp.obj CMakeFiles\MineSweeper.dir\src\Tilemap.cpp.obj CMakeFiles\MineSweeper.dir\src\Utils.cpp.obj | ..\..\extlibs\SFML-2.5.1\lib\sfml-graphics-d.lib ..\..\extlibs\TGUI-0.8\lib\tgui-d.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-window-d.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-system-d.lib
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = ..\..\extlibs\SFML-2.5.1\lib\sfml-graphics-d.lib ..\..\extlibs\TGUI-0.8\lib\tgui-d.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-window-d.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-system-d.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib

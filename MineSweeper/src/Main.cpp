@@ -1,9 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <sstream>
-#include "Tilemap.h"
-#include "GameState.h"
-#include "Utils.h"
+#include "MineSweeper.h"
+#include "Gui.h"
 
 using std::string;
 using std::vector;
@@ -17,7 +16,7 @@ using namespace sf;
 ///
 ////////////////////////////////////////////////////////////
 int main() {
-	Vector2u winSize(20 * 20, 36 * 20);
+	Vector2u winSize(400, 677);
 
 	// paths
 	string assets = "../../game/assets/";
@@ -29,6 +28,8 @@ int main() {
 		Style::Titlebar | Style::Close | Style::Resize
 	);
 
+	window.setFramerateLimit(60);
+
 	/*
 	// Set icon
 	Image icon;
@@ -36,12 +37,11 @@ int main() {
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	*/
 
-	MineSweeper state("../../assets/", GDifficulty::veryHard);
+	MineSweeper state("../../assets/", GDifficulty::easy);
 	Vector2u size = state.getSize();
-	window.setSize(Vector2u(size.x * 20, size.y * 20));
 
-	View view(FloatRect(0, 0, size.x * 16, size.y * 16));
-	window.setView(view);
+	Gui gui(&state, &window, "../../assets/UI.txt");
+	gui.resize();
 
 	FPS fpsCounter;
 
@@ -54,25 +54,20 @@ int main() {
 			if (event.type == Event::Closed)
 				window.close();
 
-			// Window size changed
-			if (event.type == Event::Resized) {
-				std::cout << "Window resized:\n";
-				std::printf("[%u,%u] => [%u,%u])\n", winSize.x, winSize.y, window.getSize().x, window.getSize().y);
-			}
-
 			if (event.type == Event::KeyPressed)
 				if (event.key.code == sf::Keyboard::R)
 					state.reset();
 
-
-			if (state.getGState() == GState::running)
-				state.handleEvents(event, window);
+			gui.handleEvents(event);
 		}
 
-		window.clear(Color::White);
+		gui.update();
 
+		window.clear(Color::White);
 		window.draw(state.getBG());
 		window.draw(state.getFG());
+
+		gui.draw();
 
 		window.display();
 

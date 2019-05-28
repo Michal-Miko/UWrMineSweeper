@@ -1,2 +1,2 @@
-RecentFiles = ["gui1.txt"];
+RecentFiles = ["D:\\Dev\\Studia\\Github\\Michal-Miko\\UWrMineSweeper\\MineSweeper\\assets\\UI.txt"];
 Themes = ["themes/BabyBlue.txt", "themes/BabyBlue.txt", "themes/Black.txt", "themes/TransparentGrey.txt"];

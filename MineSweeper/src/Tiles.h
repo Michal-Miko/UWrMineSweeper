@@ -67,5 +67,5 @@ public:
 	virtual void clickedOn();
 };
 
-
+// TODO: Flare
 // Powerup tiles?

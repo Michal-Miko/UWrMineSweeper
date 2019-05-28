@@ -8,11 +8,19 @@ typedef unsigned short ushort;
 using sf::Vector2u;
 using std::vector;
 
+enum class TTheme {
+	blue,
+	green,
+	black,
+	white
+};
+
 enum class TState {
 	revealed,
 	hidden,
 	flagged,
 	revealNearby,
+	update,
 	any
 };
 
@@ -31,14 +39,17 @@ protected:
 	TType type;
 	ushort nearbyMines;
 public:
-	const static Vector2u fgPos;
+	static TTheme theme;
+	static Vector2u fgPos;
+	static Vector2u flagPos;
 	const static Vector2u bgPos;
-	const static Vector2u flagPos;
+	static void setTheme(TTheme theme);
 
 	Tile(Vector2u tilesetPos);
 	Tile(ushort x, ushort y);
 	TType getType() const;
 	TState getState() const;
+	void setState(TState s);
 	const Vector2u& getTilesetPos() const;
 	const Vector2u& getBoardPos() const;
 	void setBoardPos(Vector2u bPos);

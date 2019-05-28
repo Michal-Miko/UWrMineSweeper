@@ -14,19 +14,21 @@ using sf::Vertex;
 using sf::Vector2u;
 using sf::Vector2f;
 using std::vector;
+using std::floor;
 
 class Tilemap : public Drawable {
 private:
 	Texture tileset;
 	VertexArray vertices;
 	Vector2u size;
-	float textureDim;
-	float renderDim;
+	float tDim;
+	float rDim;
+	float spacer;
 public:
 	Tilemap();
 	Tilemap(
 		Texture tileset, Vector2u size,
-		float textureDim, float renderDim,
+		float tDim, float rDim,
 		Vector2f texPos
 	);
 

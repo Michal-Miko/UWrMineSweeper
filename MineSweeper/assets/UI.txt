@@ -1,4 +1,49 @@
 Renderer.1 {
+    backgroundcolor = transparent;
+    bordercolor = white;
+    borders = (0, 0, 0, 0);
+    textcolor = white;
+    textstyle = Bold;
+}
+
+Renderer.2 {
+    backgroundcolor = rgba(180, 180, 180, 215);
+    bordercolor = rgba(240, 240, 240, 215);
+    borders = (1, 1, 1, 1);
+    caretcolor = rgba(255, 255, 255, 215);
+    selectedtextbackgroundcolor = rgba(0, 110, 200, 130);
+    selectedtextcolor = rgba(255, 255, 255, 245);
+    textcolor = rgba(255, 255, 255, 215);
+    texturebackground = None;
+
+    scrollbar {
+        arrowbackgroundcolor = rgba(160, 160, 160, 215);
+        arrowbackgroundcolorhover = rgba(170, 170, 170, 215);
+        arrowcolor = rgba(200, 200, 200, 215);
+        arrowcolorhover = rgba(225, 225, 225, 215);
+        thumbcolor = rgba(185, 185, 185, 215);
+        thumbcolorhover = rgba(195, 195, 195, 215);
+        trackcolor = rgba(160, 160, 160, 215);
+        trackcolorhover = rgba(170, 170, 170, 215);
+    }
+}
+
+Renderer.3 {
+    textcolor = rgba(255, 255, 255, 215);
+
+    scrollbar {
+        arrowbackgroundcolor = rgba(160, 160, 160, 215);
+        arrowbackgroundcolorhover = rgba(170, 170, 170, 215);
+        arrowcolor = rgba(200, 200, 200, 215);
+        arrowcolorhover = rgba(225, 225, 225, 215);
+        thumbcolor = rgba(185, 185, 185, 215);
+        thumbcolorhover = rgba(195, 195, 195, 215);
+        trackcolor = rgba(160, 160, 160, 215);
+        trackcolorhover = rgba(170, 170, 170, 215);
+    }
+}
+
+Renderer.4 {
     backgroundcolor = rgba(180, 180, 180, 215);
     backgroundcolordown = rgba(150, 150, 150, 215);
     backgroundcolorhover = rgba(190, 190, 190, 215);
@@ -14,7 +59,7 @@ Renderer.1 {
     texturehover = None;
 }
 
-Renderer.2 {
+Renderer.5 {
     arrowbackgroundcolor = rgba(160, 160, 160, 215);
     arrowbackgroundcolorhover = rgba(170, 170, 170, 215);
     arrowcolor = rgba(200, 200, 200, 215);
@@ -50,53 +95,8 @@ Renderer.2 {
     }
 }
 
-Renderer.3 {
-    backgroundcolor = transparent;
-    bordercolor = white;
-    borders = (0, 0, 0, 0);
-    textcolor = white;
-    textstyle = Bold;
-}
-
-Renderer.4 {
-    textcolor = rgba(255, 255, 255, 215);
-
-    scrollbar {
-        arrowbackgroundcolor = rgba(160, 160, 160, 215);
-        arrowbackgroundcolorhover = rgba(170, 170, 170, 215);
-        arrowcolor = rgba(200, 200, 200, 215);
-        arrowcolorhover = rgba(225, 225, 225, 215);
-        thumbcolor = rgba(185, 185, 185, 215);
-        thumbcolorhover = rgba(195, 195, 195, 215);
-        trackcolor = rgba(160, 160, 160, 215);
-        trackcolorhover = rgba(170, 170, 170, 215);
-    }
-}
-
-Renderer.5 {
-    backgroundcolor = rgba(180, 180, 180, 215);
-    bordercolor = rgba(240, 240, 240, 215);
-    borders = (1, 1, 1, 1);
-    caretcolor = rgba(255, 255, 255, 215);
-    selectedtextbackgroundcolor = rgba(0, 110, 200, 130);
-    selectedtextcolor = rgba(255, 255, 255, 245);
-    textcolor = rgba(255, 255, 255, 215);
-    texturebackground = None;
-
-    scrollbar {
-        arrowbackgroundcolor = rgba(160, 160, 160, 215);
-        arrowbackgroundcolorhover = rgba(170, 170, 170, 215);
-        arrowcolor = rgba(200, 200, 200, 215);
-        arrowcolorhover = rgba(225, 225, 225, 215);
-        thumbcolor = rgba(185, 185, 185, 215);
-        thumbcolorhover = rgba(195, 195, 195, 215);
-        trackcolor = rgba(160, 160, 160, 215);
-        trackcolorhover = rgba(170, 170, 170, 215);
-    }
-}
-
 Panel.TopPanel {
-    Size = (100%, 6%);
+    Size = (100%, 40);
 
     Renderer {
         backgroundcolor = #3F3F3F;
@@ -109,7 +109,7 @@ Panel.TopPanel {
         Text = "Time:";
         TextSize = 12;
         VerticalAlignment = Center;
-        renderer = &3;
+        renderer = &1;
     }
 
     Label.Time {
@@ -119,15 +119,15 @@ Panel.TopPanel {
         Text = 0;
         TextSize = 12;
         VerticalAlignment = Center;
-        renderer = &3;
+        renderer = &1;
     }
 
     Button.Reset {
-        Position = (230, 25%);
-        Size = (18%, 50%);
+        Position = (600, 25%);
+        Size = (50, 50%);
         Text = Reset;
         TextSize = 12;
-        renderer = &1;
+        renderer = &4;
     }
 
     Label.LabelMines {
@@ -137,7 +137,7 @@ Panel.TopPanel {
         Text = "Flagged mines:";
         TextSize = 12;
         VerticalAlignment = Center;
-        renderer = &3;
+        renderer = &1;
     }
 
     Label.Mines {
@@ -147,15 +147,15 @@ Panel.TopPanel {
         Text = 0;
         TextSize = 12;
         VerticalAlignment = Center;
-        renderer = &3;
+        renderer = &1;
     }
 
     Button.OpenSettings {
-        Position = (77%, 25%);
-        Size = (20%, 50%);
+        Position = ((100% - width) - 10, 25%);
+        Size = (60, 50%);
         Text = Settings;
         TextSize = 12;
-        renderer = &1;
+        renderer = &4;
     }
 }
 
@@ -222,7 +222,7 @@ textcolorhover = rgba(255, 255, 255, 235);
             Size = (20%, 60%);
             Text = OK;
             TextSize = 13;
-            renderer = &1;
+            renderer = &4;
         }
 
         Button.Cancel {
@@ -230,7 +230,7 @@ textcolorhover = rgba(255, 255, 255, 235);
             Size = (30%, 60%);
             Text = Cancel;
             TextSize = 13;
-            renderer = &1;
+            renderer = &4;
         }
 
         Button.Apply {
@@ -238,7 +238,7 @@ textcolorhover = rgba(255, 255, 255, 235);
             Size = (30%, 60%);
             Text = Apply;
             TextSize = 13;
-            renderer = &1;
+            renderer = &4;
         }
     }
 
@@ -257,7 +257,7 @@ textcolorhover = rgba(255, 255, 255, 235);
             Size = (58, 17);
             Text = "Difficulty:";
             TextSize = 12;
-            renderer = &4;
+            renderer = &3;
         }
 
         ComboBox.Difficulty {
@@ -270,7 +270,7 @@ textcolorhover = rgba(255, 255, 255, 235);
             SelectedItemIndex = 1;
             Size = (40%, 20%);
             TextSize = 12;
-            renderer = &2;
+            renderer = &5;
         }
 
         Label.LabelTheme {
@@ -280,20 +280,19 @@ textcolorhover = rgba(255, 255, 255, 235);
             Size = (48, 17);
             Text = "Theme:";
             TextSize = 12;
-            renderer = &4;
+            renderer = &3;
         }
 
         ComboBox.Theme {
             ChangeItemOnScroll = true;
             ExpandDirection = Down;
-            Items = [blue, green];
+            Items = [blue, green, black, white];
             ItemsToDisplay = 0;
             MaximumItems = 0;
             Position = (10, 66%);
-            SelectedItemIndex = 0;
             Size = (40%, 20%);
             TextSize = 12;
-            renderer = &2;
+            renderer = &5;
         }
 
         Panel.CustomPanel {
@@ -336,7 +335,7 @@ textcolorhover = rgba(255, 255, 255, 235);
                 Size = (40%, 20%);
                 Text = "";
                 TextSize = 13;
-                renderer = &5;
+                renderer = &2;
             }
 
             TextBox.Height {
@@ -346,7 +345,7 @@ textcolorhover = rgba(255, 255, 255, 235);
                 Size = (40%, 20%);
                 Text = "";
                 TextSize = 13;
-                renderer = &5;
+                renderer = &2;
             }
 
             Label.x {
@@ -432,7 +431,7 @@ textcolorhover = rgba(255, 255, 255, 235);
             Text = "Time:";
             TextSize = 26;
             VerticalAlignment = Center;
-            renderer = &4;
+            renderer = &3;
         }
 
         Label.Score {
@@ -442,7 +441,7 @@ textcolorhover = rgba(255, 255, 255, 235);
             Text = 0;
             TextSize = 26;
             VerticalAlignment = Center;
-            renderer = &4;
+            renderer = &3;
         }
     }
 

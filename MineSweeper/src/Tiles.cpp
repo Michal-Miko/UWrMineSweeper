@@ -1,8 +1,15 @@
 #include "Tiles.h"
 
-const Vector2u Tile::fgPos = Vector2u(1, 0);
+TTheme Tile::theme = TTheme::black;
+Vector2u Tile::fgPos = Vector2u(2 * (int)Tile::theme, 2);
+Vector2u Tile::flagPos = Vector2u(2 * (int)Tile::theme + 1, 2);
 const Vector2u Tile::bgPos = Vector2u(0, 1);
-const Vector2u Tile::flagPos = Vector2u(3, 0);
+
+void Tile::setTheme(TTheme theme) {
+	Tile::theme = theme;
+	fgPos.x = 2 * (int)theme;
+	flagPos.x = 2 * (int)theme + 1;
+}
 
 Tile::Tile(Vector2u tilesetPos) : tilesetPos(tilesetPos) {}
 
@@ -14,6 +21,10 @@ TType Tile::getType() const {
 
 TState Tile::getState() const {
 	return state;
+}
+
+void Tile::setState(TState s) {
+	state = s;
 }
 
 const Vector2u & Tile::getTilesetPos() const {
@@ -64,7 +75,7 @@ void EmptyTile::clickedOn() {
 		state = TState::revealNearby;
 }
 
-Mine::Mine() : Tile(5, 0) {
+Mine::Mine() : Tile(1, 0) {
 	state = TState::hidden;
 	type = TType::mine;
 }

@@ -3,6 +3,7 @@
 #include <TGUI/TGUI.hpp>
 #include <sstream>
 #include "MineSweeper.h"
+#include "Tiles.h"
 #include "Utils.h"
 
 typedef tgui::Gui TGui;

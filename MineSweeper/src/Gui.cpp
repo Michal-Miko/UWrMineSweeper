@@ -2,6 +2,7 @@
 
 void Gui::loadSettings() {
 	GDifficulty d = (GDifficulty)difficulty->getSelectedItemIndex();
+	Tile::setTheme((TTheme)theme->getSelectedItemIndex());
 	state->setDiff(d);
 
 	if (d == GDifficulty::custom) {
@@ -86,6 +87,7 @@ Gui::Gui(MineSweeper * state, sf::RenderWindow* target, std::string guiPath) {
 		loadSettings();
 	});
 	difficulty->setSelectedItemByIndex((int)state->getDiff());
+	theme->setSelectedItemByIndex((int)Tile::theme);
 
 	// GameOver window
 	gameOver->connect("closed", [&]() {
@@ -106,21 +108,21 @@ void Gui::handleEvents(const sf::Event & e) {
 			window->getSize().x,
 			window->getSize().y
 		);
+		winSize = window->getSize();
 
 		if (!resizing) {
 			resize();
 		}
-		else {
+		else
 			resizing = false;
-			winSize = window->getSize();
-		}
+
 	}
 
 	if (state->getGState() == GState::paused)
 		return;
 
 	if (e.type == Event::MouseButtonPressed &&
-		e.mouseButton.y >= winSize.y*0.06f) {
+		e.mouseButton.y >= 40) {
 		// Position
 		unsigned mx = e.mouseButton.x;
 		unsigned my = e.mouseButton.y;
@@ -136,7 +138,7 @@ void Gui::handleEvents(const sf::Event & e) {
 		);
 		my = (unsigned)map(
 			(float)my,
-			winSize.y*0.06f,
+			40.0f,
 			(float)winSize.y,
 			0.0f,
 			(float)size.y
@@ -155,28 +157,13 @@ void Gui::update() {
 	if (state->getGState() == GState::running)
 		state->checkVictory();
 
-	// Pause
-	if (state->getGState() == GState::victory) {
-		gameOverText->setText("Victory!");
-		gameOver->setVisible("True");
-		//state->revealMines();
-		state->setGState(GState::paused);
-		endTime->setText(time->getText());
-	}
-	else if (state->getGState() == GState::loss) {
-		gameOverText->setText("Game Over");
-		gameOver->setVisible("True");
-		state->revealMines();
-		state->setGState(GState::paused);
-		endTime->setText(time->getText());
-	}
-
 	std::stringstream ss;
 
 	// Flags
 	ss << state->getFlagCount() << "/" << state->getMineCount();
 	mines->setText(ss.str());
 	ss.str(std::string());
+	// TODO: Fix total mine count after resizing board
 
 	// Time
 	sf::Time t = state->getTimeElapsed();
@@ -184,27 +171,56 @@ void Gui::update() {
 	int s = t.asSeconds();
 	ss << s << "." << ms;
 	time->setText(ss.str());
+
+	// Pause
+	if (state->getGState() == GState::victory) {
+		gameOverText->setText("Victory!");
+		gameOver->setVisible("True");
+		//state->revealMines();
+		state->setGState(GState::paused);
+		endTime->setText(ss.str());
+	}
+	else if (state->getGState() == GState::loss) {
+		gameOverText->setText("Game Over");
+		gameOver->setVisible("True");
+		state->revealMines();
+		state->setGState(GState::paused);
+		endTime->setText(ss.str());
+	}
+
 }
 
 void Gui::resize() {
-	winSize = window->getSize();
 	Vector2u size = state->getSize();
 
-	sf::View v1(sf::FloatRect(0, 0, size.x * 16, size.y * 16));
-	v1.setViewport(sf::FloatRect(0, 0.06, 1, 0.94));
+	if (winSize.y % size.y != 0)
+		winSize.y -= winSize.y % size.y;
+
+	float w = winSize.x / (float)size.x;
+	float h = (winSize.y - 40) / (float)size.y;
+
+	float upp = size.y * 16 / (winSize.y - 40.0f);
+	float offset = upp * 40;
+
+	sf::View v1(sf::FloatRect(0, -offset, size.x * 16, size.y * 16 + offset));
 	window->setView(v1);
 
-	float w = winSize.x / size.x;
-	float h = winSize.y / size.y;
+	winSize.x = h * size.x;
 
-	winSize = Vector2u(h * size.x, (unsigned)(winSize.y * 100 / 94));
 	sf::View v2(sf::FloatRect(0, 0, winSize.x, winSize.y));
 	gui.setView(v2);
 
-	if (abs(w - h) > FLT_EPSILON) {
-		window->setSize(winSize);
-		resizing = true;
+	if (winSize.x % size.x != 0)
+		winSize.x -= winSize.x % size.x;
+
+	if (winSize.x < 320) {
+		winSize.y += size.y;
+		resize();
+		return;
 	}
+
+	window->setSize(winSize);
+	resizing = true;
 }
 
 void Gui::draw() {

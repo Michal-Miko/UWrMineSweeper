@@ -17,52 +17,35 @@ Tile::Tile(Vector2u tilesetPos) : tilesetPos(tilesetPos) {}
 
 Tile::Tile(ushort x, ushort y) : tilesetPos(x, y) {}
 
-TType Tile::getType() const {
-	return type;
+ushort Tile::countNearby(TState state, TType type) {
+	ushort count = 0;
+
+	for (auto t : neighbours) {
+		if (state == TState::any || state == t->state)
+			if (type == TType::any || type == t->type)
+				count++;
+	}
+
+	return count;
 }
 
-TState Tile::getState() const {
-	return state;
-}
-
-void Tile::setState(TState s) {
-	state = s;
-}
-
-const Vector2u & Tile::getTilesetPos() const {
-	return tilesetPos;
-}
-
-const Vector2u & Tile::getBoardPos() const {
-	return boardPos;
-}
-
-void Tile::setBoardPos(Vector2u bPos) {
-	boardPos = bPos;
-}
-
-const vector<Tile*>& Tile::getNeighbours() const {
-	return neighbours;
-}
-
-void Tile::setNeighbours(vector<Tile*> n) {
-	neighbours = n;
-}
-
-ushort Tile::getNearbyMines() const {
-	return nearbyMines;
-}
-
-void Tile::setNearbyMines(ushort count) {
-	nearbyMines = count;
-	tilesetPos.x = count;
-}
-
-void Tile::flag() {
-	if (state == TState::hidden)
+void Tile::flag(Tilemap* tm, unsigned* fc) {
+	if (state == TState::hidden) {
+		tm->changeTile(
+			Vector2u(boardPos.x, boardPos.y),
+			(Vector2f)Tile::flagPos
+		);
+		(*fc)++;
 		state = TState::flagged;
-	else if (state == TState::flagged)
+	}
+	else if (state == TState::flagged) {
+		tm->changeTile(
+			Vector2u(boardPos.x, boardPos.y),
+			(Vector2f)Tile::fgPos
+		);
+		(*fc)--;
 		state = TState::hidden;
+	}
 }
 
 EmptyTile::EmptyTile() : Tile(0, 1) {
@@ -70,11 +53,39 @@ EmptyTile::EmptyTile() : Tile(0, 1) {
 	type = TType::empty;
 }
 
-void EmptyTile::clickedOn() {
-	if (state == TState::hidden)
+void EmptyTile::setNearbyMines() {
+	nearbyMines = this->countNearby(TState::any, TType::mine);
+	if (type == TType::empty)
+		tilesetPos.x = nearbyMines;
+}
+
+bool EmptyTile::clickedOn(Tilemap* tm, unsigned* hc, unsigned* fc) {
+	if (state == TState::hidden) {
+		setNearbyMines();
+
+		tm->changeTile(
+			Vector2u(boardPos.x, boardPos.y),
+			(Vector2f)tilesetPos
+		);
+
 		state = TState::revealed;
-	else if (state == TState::revealed)
-		state = TState::revealNearby;
+		(*hc)--;
+
+		if (nearbyMines == 0)
+			for (auto t : neighbours)
+				if (t->state == TState::hidden)
+					t->clickedOn(tm, hc, fc);
+
+	}
+	else if (state == TState::revealed) {
+		if (countNearby(TState::flagged, TType::any) == nearbyMines) {
+			for (auto t : neighbours)
+				if (t->state == TState::hidden)
+					if (t->clickedOn(tm, hc, fc))
+						return true;			// clicked on a mine
+		}
+	}
+	return false;
 }
 
 Mine::Mine() : Tile(1, 0) {
@@ -82,7 +93,43 @@ Mine::Mine() : Tile(1, 0) {
 	type = TType::mine;
 }
 
-void Mine::clickedOn() {
-	if (state == TState::hidden)
+bool Mine::clickedOn(Tilemap* tm, unsigned* hc, unsigned* fc) {
+	if (state == TState::hidden) {
+		tm->changeTile(
+			Vector2u(boardPos.x, boardPos.y),
+			(Vector2f)tilesetPos
+		);
 		state = TState::revealed;
+		return true;
+	}
+	return false;
+}
+
+Flare::Flare() {
+	tilesetPos = Vector2u(2, 0);
+	state = TState::hidden;
+	type = TType::flare;
+}
+
+bool Flare::clickedOn(Tilemap * tm, unsigned* hc, unsigned* fc) {
+	if (state == TState::hidden) {
+		setNearbyMines();
+
+		tm->changeTile(
+			Vector2u(boardPos.x, boardPos.y),
+			(Vector2f)tilesetPos
+		);
+
+		(*hc)--;
+		state = TState::revealed;
+	}
+	else {
+		for (auto t : neighbours) {
+			if (t->type == TType::mine && t->state == TState::hidden)
+				t->flag(tm, fc);
+			else if (t->state == TState::hidden)
+				t->clickedOn(tm, hc, fc);
+		}
+	}
+	return false;
 }

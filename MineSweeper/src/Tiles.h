@@ -2,6 +2,7 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <vector>
+#include "Tilemap.h"
 
 typedef unsigned short ushort;
 
@@ -23,25 +24,24 @@ enum class TState {
 	revealed,
 	hidden,
 	flagged,
-	revealNearby,
 	any
 };
 
 enum class TType {
 	empty,
 	mine,
+	flare,
 	any
 };
 
 class Tile {
 protected:
-	vector<Tile*> neighbours;
 	Vector2u tilesetPos;
-	Vector2u boardPos;
-	TState state;
-	TType type;
-	ushort nearbyMines;
 public:
+	vector<Tile*> neighbours;
+	Vector2u boardPos;
+	TType type;
+	TState state;
 	static TTheme theme;
 	static Vector2u fgPos;
 	static Vector2u flagPos;
@@ -50,36 +50,31 @@ public:
 
 	Tile(Vector2u tilesetPos);
 	Tile(ushort x, ushort y);
-	TType getType() const;
-	TState getState() const;
-	void setState(TState s);
-	const Vector2u& getTilesetPos() const;
-	const Vector2u& getBoardPos() const;
-	void setBoardPos(Vector2u bPos);
 
 	// Neighbours
-	const vector<Tile*>& getNeighbours() const;
-	void  setNeighbours(vector<Tile*> n);
-	// Nearby Mines
-	ushort getNearbyMines() const;
-	void setNearbyMines(ushort count);
+	ushort countNearby(TState state, TType type);
 
-	void flag();
-	virtual void clickedOn() = 0;
+	void flag(Tilemap* tm, unsigned* fc);
+	virtual bool clickedOn(Tilemap* tm, unsigned* hc, unsigned* fc) = 0;
 };
 
 class EmptyTile : public Tile {
-private:
+protected:
+	ushort nearbyMines;
+	void setNearbyMines();
 public:
 	EmptyTile();
-	virtual void clickedOn();
+	virtual bool clickedOn(Tilemap* tm, unsigned* hc, unsigned* fc) override;
 };
 
 class Mine : public Tile {
 public:
 	Mine();
-	virtual void clickedOn();
+	virtual bool clickedOn(Tilemap* tm, unsigned* hc, unsigned* fc) override;
 };
 
-// TODO: Flare
-// Powerup tiles?
+class Flare : public EmptyTile {
+public:
+	Flare();
+	virtual bool clickedOn(Tilemap* tm, unsigned* hc, unsigned* fc) override;
+};

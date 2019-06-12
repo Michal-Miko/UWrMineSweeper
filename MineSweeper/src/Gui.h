@@ -25,6 +25,7 @@ private:
 	// Top panel
 	Panel::Ptr topPanel;
 	Label::Ptr mines;
+	Label::Ptr flares;
 	Label::Ptr time;
 	Button::Ptr reset;
 	Button::Ptr openSettings;
@@ -40,13 +41,13 @@ private:
 	Button::Ptr cancel;
 	Button::Ptr apply;
 
-	void loadSettings();
-
 	// GameOver
 	ChildWindow::Ptr gameOver;
 	Label::Ptr gameOverText;
 	Label::Ptr endTime;
 
+	// Read information from settings menu
+	void loadSettings();
 public:
 	Gui(MineSweeper* state, sf::RenderWindow* target, std::string guiPath);
 	void handleEvents(const sf::Event& e);

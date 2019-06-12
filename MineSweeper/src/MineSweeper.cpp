@@ -1,79 +1,9 @@
 #include "MineSweeper.h"
 
-void MineSweeper::updateTile(Tile* t) {
-	unsigned x = t->getBoardPos().x;
-	unsigned y = t->getBoardPos().y;
-	Tile* tile = tiles[y][x];
-
-	switch (tile->getState()) {
-	case TState::revealed:
-		fgTilemap.changeTile(
-			Vector2u(x, y),
-			(Vector2f)tiles[y][x]->getTilesetPos()
-		);
-
-		if (tile->getType() == TType::mine) {
-			gState = GState::loss;
-			break;
-		}
-
-		if (tile->getNearbyMines() == 0) {
-			for (auto t : tile->getNeighbours())
-				if (t->getState() == TState::hidden) {
-					t->clickedOn();
-					updateTile(t);
-					hiddenCount--;
-				}
-		}
-		break;
-
-	case TState::hidden:
-		fgTilemap.changeTile(
-			Vector2u(x, y),
-			(Vector2f)Tile::fgPos
-		);
-		flagCount--;
-		break;
-
-	case TState::flagged:
-		fgTilemap.changeTile(
-			Vector2u(x, y),
-			(Vector2f)Tile::flagPos
-		);
-		flagCount++;
-		break;
-
-	case TState::revealNearby:
-		if (countNearby(tile, TState::flagged, TType::any) == tile->getNearbyMines()) {
-			for (auto t : tile->getNeighbours())
-				if (t->getState() == TState::hidden) {
-					t->clickedOn();
-					updateTile(t);
-					hiddenCount--;
-				}
-		}
-	default:
-		break;
-	}
-}
-
-ushort MineSweeper::countNearby(const Tile* t, TState state, TType type) {
-	ushort count = 0;
-
-	for (auto t : t->getNeighbours()) {
-		if (state == TState::any || state == t->getState())
-			if (type == TType::any || type == t->getType())
-				count++;
-	}
-
-	return count;
-}
-
 void MineSweeper::addNeighbours(Tile* t) {
-	unsigned x = t->getBoardPos().x;
-	unsigned y = t->getBoardPos().y;
+	unsigned x = t->boardPos.x;
+	unsigned y = t->boardPos.y;
 	vector<Tile*> neighbours;
-
 	// left
 	if (x > 0)
 		neighbours.push_back(tiles[y][x - 1]);
@@ -99,7 +29,7 @@ void MineSweeper::addNeighbours(Tile* t) {
 	if (x > 0 && y < size.y - 1)
 		neighbours.push_back(tiles[y + 1][x - 1]);
 
-	t->setNeighbours(neighbours);
+	t->neighbours = neighbours;
 }
 
 MineSweeper::MineSweeper() {
@@ -127,60 +57,13 @@ MineSweeper::MineSweeper(std::string assets, Vector2u customSize) : MineSweeper(
 
 void MineSweeper::clickOnTile(Vector2u pos, sf::Mouse::Button button) {
 	if (button == sf::Mouse::Left) {
-		if (tiles[pos.y][pos.x]->getState() == TState::hidden)
-			hiddenCount--;
-		tiles[pos.y][pos.x]->clickedOn();
-		updateTile(tiles[pos.y][pos.x]);
+		if (tiles[pos.y][pos.x]->clickedOn(&tilemap, &hiddenCount, &flagCount))
+			gState = GState::loss;
 	}
 
 	if (button == sf::Mouse::Right) {
-		tiles[pos.y][pos.x]->flag();
-		updateTile(tiles[pos.y][pos.x]);
+		tiles[pos.y][pos.x]->flag(&tilemap, &flagCount);
 	}
-}
-
-const Vector2u & MineSweeper::getSize() const {
-	return size;
-}
-
-void MineSweeper::setSize(Vector2u size) {
-	this->size = size;
-}
-
-const Tilemap & MineSweeper::getFG() const {
-	return fgTilemap;
-}
-
-const Tilemap & MineSweeper::getBG() const {
-	return bgTilemap;
-}
-
-const GState & MineSweeper::getGState() const {
-	return gState;
-}
-
-void MineSweeper::setGState(GState state) {
-	gState = state;
-}
-
-GDifficulty MineSweeper::getDiff() const {
-	return diff;
-}
-
-void MineSweeper::setDiff(GDifficulty d) {
-	diff = d;
-}
-
-unsigned MineSweeper::getMineCount() {
-	return mineCount;
-}
-
-unsigned MineSweeper::getFlagCount() {
-	return flagCount;
-}
-
-sf::Time MineSweeper::getTimeElapsed() {
-	return clock.getElapsedTime();
 }
 
 void MineSweeper::checkVictory() {
@@ -191,15 +74,13 @@ void MineSweeper::checkVictory() {
 void MineSweeper::revealMines() {
 	for (auto v : tiles)
 		for (auto t : v)
-			if (t->getType() == TType::mine) {
-				if (t->getState() == TState::hidden) {
-					t->clickedOn();
-					updateTile(t);
+			if (t->type == TType::mine) {
+				if (t->state == TState::hidden) {
+					t->clickedOn(&tilemap, &hiddenCount, &flagCount);
 				}
-				else if (t->getState() == TState::flagged) {
-					t->flag();
-					t->clickedOn();
-					updateTile(t);
+				else if (t->state == TState::flagged) {
+					t->flag(&tilemap, &flagCount);
+					t->clickedOn(&tilemap, &flagCount, &flagCount);
 				}
 			}
 }
@@ -228,7 +109,9 @@ void MineSweeper::reset() {
 		break;
 	}
 
+	flares = 0;
 	mineCount = size.x * size.y * (16 + (int)diff) / 100;
+	flareCount = 1 + size.x * size.y * 3 / 100;
 
 	gState = GState::running;
 	hiddenCount = size.x*size.y;
@@ -240,14 +123,25 @@ void MineSweeper::reset() {
 			tiles[y].push_back(new EmptyTile());
 	}
 
-	// Mine generation
+	// Flare, Mine generation
 	std::uniform_int_distribution<unsigned> distHor(0, size.x - 1);
 	std::uniform_int_distribution<unsigned> distVer(0, size.y - 1);
 	unsigned x, y;
+
+	for (unsigned i = 0; i < flareCount; i++) {
+		x = distHor(rng);
+		y = distVer(rng);
+		while (tiles[y][x]->type == TType::flare) {
+			x = distHor(rng);
+			y = distVer(rng);
+		}
+		tiles[y][x] = new Flare();
+	}
+
 	for (unsigned i = 0; i < mineCount; i++) {
 		x = distHor(rng);
 		y = distVer(rng);
-		while (tiles[y][x]->getType() == TType::mine) {
+		while (tiles[y][x]->type == TType::mine || tiles[y][x]->type == TType::flare) {
 			x = distHor(rng);
 			y = distVer(rng);
 		}
@@ -257,22 +151,15 @@ void MineSweeper::reset() {
 	// Adding neighbours, setting positions
 	for (unsigned y = 0; y < size.y; y++)
 		for (unsigned x = 0; x < size.x; x++) {
-			tiles[y][x]->setBoardPos(Vector2u(x, y));
+			tiles[y][x]->boardPos = Vector2u(x, y);
 			addNeighbours(tiles[y][x]);
 		}
-
-	// Set mine counts
-	for (auto v : tiles)
-		for (auto t : v)
-			if (t->getType() == TType::empty)
-				t->setNearbyMines(countNearby(t, TState::any, TType::mine));
 
 	flagCount = 0;
 
 	// Graphics
 	tileset.loadFromFile(assets + "tilemap.png");
-	fgTilemap = Tilemap(tileset, size, 16, 16, (Vector2f)Tile::fgPos);
-	bgTilemap = Tilemap(tileset, size, 16, 16, (Vector2f)Tile::bgPos);
+	tilemap = Tilemap(tileset, size, 16, 16, (Vector2f)Tile::fgPos);
 
 	// Clock
 	clock.restart();

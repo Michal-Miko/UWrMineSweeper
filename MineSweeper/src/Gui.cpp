@@ -3,7 +3,7 @@
 void Gui::loadSettings() {
 	GDifficulty d = (GDifficulty)difficulty->getSelectedItemIndex();
 	Tile::setTheme((TTheme)theme->getSelectedItemIndex());
-	state->setDiff(d);
+	state->diff = d;
 
 	if (d == GDifficulty::custom) {
 		unsigned w, h;
@@ -17,7 +17,7 @@ void Gui::loadSettings() {
 		if (!(iss >> h))
 			h = 30;
 
-		state->setSize(Vector2u(w, h));
+		state->size = Vector2u(w, h);
 	}
 
 	state->reset();
@@ -36,6 +36,7 @@ Gui::Gui(MineSweeper * state, sf::RenderWindow* target, std::string guiPath) {
 	// Top Panel
 	topPanel = gui.get<Panel>("TopPanel");
 	mines = gui.get<Label>("Mines");
+	flares = gui.get<Label>("Flares");
 	time = gui.get<Label>("Time");
 	reset = topPanel->get<Button>("Reset");
 	openSettings = topPanel->get<Button>("OpenSettings");
@@ -83,14 +84,16 @@ Gui::Gui(MineSweeper * state, sf::RenderWindow* target, std::string guiPath) {
 	ok->connect("pressed", [&]() {
 		loadSettings();
 		settings->setVisible(false);
+		gameOver->setVisible(false);
 	});
 	cancel->connect("pressed", [&]() {
 		settings->setVisible(false);
 	});
 	apply->connect("pressed", [&]() {
 		loadSettings();
+		gameOver->setVisible(false);
 	});
-	difficulty->setSelectedItemByIndex((int)state->getDiff());
+	difficulty->setSelectedItemByIndex((int)state->diff);
 	theme->setSelectedItemByIndex((int)Tile::theme);
 
 	// GameOver window
@@ -102,6 +105,11 @@ Gui::Gui(MineSweeper * state, sf::RenderWindow* target, std::string guiPath) {
 void Gui::handleEvents(const sf::Event & e) {
 	if (gui.handleEvent(e))
 		return;
+
+	if (e.type == Event::KeyPressed && e.key.code == sf::Keyboard::R) {
+		state->reset();
+		gameOver->setVisible(false);
+	}
 
 	if (e.type == Event::Resized) {
 		std::cout << "Window resized:\n";
@@ -119,10 +127,9 @@ void Gui::handleEvents(const sf::Event & e) {
 		}
 		else
 			resizing = false;
-
 	}
 
-	if (state->getGState() == GState::paused)
+	if (state->gState == GState::paused)
 		return;
 
 	if (e.type == Event::MouseButtonPressed &&
@@ -130,7 +137,7 @@ void Gui::handleEvents(const sf::Event & e) {
 		// Position
 		unsigned mx = e.mouseButton.x;
 		unsigned my = e.mouseButton.y;
-		Vector2u size = state->getSize();
+		Vector2u size = state->size;
 
 		// Mapping to block pos
 		mx = (unsigned)map(
@@ -158,44 +165,50 @@ void Gui::setView(sf::View view) {
 
 void Gui::update() {
 	// Check for victory
-	if (state->getGState() == GState::running)
+	if (state->gState == GState::running)
 		state->checkVictory();
 
 	std::stringstream ss;
 
+	// Flares
+	ss << state->flareCount;
+	flares->setText(ss.str());
+	ss.str(std::string());
+
 	// Flags
-	ss << state->getFlagCount() << "/" << state->getMineCount();
+	ss << state->flagCount << "/" << state->mineCount;
 	mines->setText(ss.str());
 	ss.str(std::string());
-	// TODO: Fix total mine count after resizing board
 
 	// Time
-	sf::Time t = state->getTimeElapsed();
-	int ms = t.asMilliseconds() % 1000;
-	int s = t.asSeconds();
-	ss << s << "." << ms;
-	time->setText(ss.str());
+	if (state->gState == GState::running) {
+		sf::Time t = state->clock.getElapsedTime();
+		int ms = t.asMilliseconds() % 1000;
+		int s = (int)t.asSeconds();
+		ss << s << "." << ms;
+		time->setText(ss.str());
+	}
 
 	// Pause
-	if (state->getGState() == GState::victory) {
+	if (state->gState == GState::victory) {
 		gameOverText->setText("Victory!");
 		gameOver->setVisible("True");
 		//state->revealMines();
-		state->setGState(GState::paused);
-		endTime->setText(ss.str());
+		state->gState = GState::paused;
+		endTime->setText(time->getText());
 	}
-	else if (state->getGState() == GState::loss) {
+	else if (state->gState == GState::loss) {
 		gameOverText->setText("Game Over");
 		gameOver->setVisible("True");
 		state->revealMines();
-		state->setGState(GState::paused);
-		endTime->setText(ss.str());
+		state->gState = GState::paused;
+		endTime->setText(time->getText());
 	}
 
 }
 
 void Gui::resize() {
-	Vector2u size = state->getSize();
+	Vector2u size = state->size;
 
 	if ((winSize.y - 40) % size.y != 0)
 		winSize.y -= (winSize.y - 40) % size.y;
@@ -206,12 +219,12 @@ void Gui::resize() {
 	float upp = size.y * 16 / (winSize.y - 40.0f);
 	float offset = upp * 40;
 
-	sf::View v1(sf::FloatRect(0, -offset, size.x * 16, size.y * 16 + offset));
+	sf::View v1(sf::FloatRect(0, -offset, (float)size.x * 16, (float)size.y * 16 + offset));
 	window->setView(v1);
 
-	winSize.x = h * size.x;
+	winSize.x = (unsigned)(h * size.x);
 
-	sf::View v2(sf::FloatRect(0, 0, winSize.x, winSize.y));
+	sf::View v2(sf::FloatRect(0, 0, (float)winSize.x, (float)winSize.y));
 	gui.setView(v2);
 
 	if (winSize.x % size.x != 0)

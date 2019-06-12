@@ -20,8 +20,6 @@ Tilemap::Tilemap(
 	for (unsigned y = 0; y < size.y; y++)
 		for (unsigned x = 0; x < size.x; x++)
 			changeTile(Vector2u(x, y), texPos);
-
-	// TODO: set topbar height to a constant pixel value
 }
 
 void Tilemap::changeTile(Vector2u tilePos, Vector2f newTexPos) {

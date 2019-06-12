@@ -38,7 +38,7 @@ int main() {
 	*/
 
 	MineSweeper state("../../assets/", GDifficulty::easy);
-	Vector2u size = state.getSize();
+	Vector2u size = state.size;
 
 	Gui gui(&state, &window, "../../assets/UI.txt");
 	gui.resize();
@@ -54,18 +54,13 @@ int main() {
 			if (event.type == Event::Closed)
 				window.close();
 
-			if (event.type == Event::KeyPressed)
-				if (event.key.code == sf::Keyboard::R)
-					state.reset();
-
 			gui.handleEvents(event);
 		}
 
 		gui.update();
 
 		window.clear(Color::White);
-		window.draw(state.getBG());
-		window.draw(state.getFG());
+		window.draw(state.tilemap);
 
 		gui.draw();
 

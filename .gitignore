@@ -1,27 +1,27 @@
-# MineWars specific
+# MineSweeper specific
 # make sure everything from extlibs gets included 
-!MineWars/extlibs
+!MineSweeper/extlibs
 
 # include required dlls
-MineWars/build/*
+MineSweeper/build/*
 
-!MineWars/build/x64-Release/
-!MineWars/build/x64-Debug/
+!MineSweeper/build/x64-Release/
+!MineSweeper/build/x64-Debug/
 
-MineWars/build/x64-Release/*
-MineWars/build/x64-Debug/*
+MineSweeper/build/x64-Release/*
+MineSweeper/build/x64-Debug/*
 
-!MineWars/build/x64-Release/*.dll
-!MineWars/build/x64-Debug/*.dll
-
-
-!MineWars/build/x64-Debug/resources
-!MineWars/build/x64-Debug/themes
-
-!MineWars/build/x64-Debug/resources
-!MineWars/build/x64-Debug/themes
+!MineSweeper/build/x64-Release/*.dll
+!MineSweeper/build/x64-Debug/*.dll
 
 
+!MineSweeper/build/x64-Debug/resources
+!MineSweeper/build/x64-Debug/themes
+
+!MineSweeper/build/x64-Debug/resources
+!MineSweeper/build/x64-Debug/themes
+
+Docs/uml
 
 *.ninja_log
 *.ninja_deps

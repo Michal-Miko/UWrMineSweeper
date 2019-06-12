@@ -1,10 +1,8 @@
 #pragma once
 
 #include <TGUI/TGUI.hpp>
-#include <sstream>
 #include "MineSweeper.h"
 #include "Tiles.h"
-#include "Utils.h"
 
 typedef tgui::Gui TGui;
 using tgui::Panel;
@@ -49,10 +47,10 @@ private:
 	// Read information from settings menu
 	void loadSettings();
 public:
-	Gui(MineSweeper* state, sf::RenderWindow* target, std::string guiPath);
-	void handleEvents(const sf::Event& e);
+	Gui(MineSweeper* state, sf::RenderWindow* target, const std::string& guiPath);
+	void handleEvents(const Event& e);
 	void setView(sf::View view);
-	void update();
+	void update() const;
 	void resize();
 	void draw();
 };

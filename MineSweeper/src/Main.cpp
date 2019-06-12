@@ -1,25 +1,16 @@
 #include <SFML/Graphics.hpp>
-#include <iostream>
-#include <sstream>
 #include "MineSweeper.h"
 #include "Gui.h"
 
 using std::string;
-using std::vector;
 
 using namespace sf;
 
-////////////////////////////////////////////////////////////
-/// Entry point of application
-///
-/// \return Application exit code
-///
-////////////////////////////////////////////////////////////
-int main() {
+int main() { // NOLINT(bugprone-exception-escape)
 	Vector2u winSize(400, 677);
 
 	// paths
-	string assets = "../../game/assets/";
+	const string assets = "../../assets/";
 
 	// Create the window of the application
 	RenderWindow window(
@@ -30,27 +21,24 @@ int main() {
 
 	window.setFramerateLimit(60);
 
-	/*
 	// Set icon
 	Image icon;
-	icon.loadFromFile(assets + "icons/i16.png");
+	icon.loadFromFile(assets + "icon.png");
 	window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-	*/
 
-	MineSweeper state("../../assets/", GDifficulty::easy);
-	Vector2u size = state.size;
+	MineSweeper state(assets, GDifficulty::easy);
 
-	Gui gui(&state, &window, "../../assets/UI.txt");
+	Gui gui(&state, &window, assets + "UI.txt");
 	gui.resize();
 
-	FPS fpsCounter;
+	//  Requires Utils.h
+	//Fps fpsCounter;
 
 	// Window loop
 	while (window.isOpen()) {
-		Event event;
+		Event event{};
 		// check all the window's events
 		while (window.pollEvent(event)) {
-			// "close requested" event: we close the window
 			if (event.type == Event::Closed)
 				window.close();
 
@@ -66,12 +54,12 @@ int main() {
 
 		window.display();
 
+		/* FPS
 		fpsCounter.update();
 		std::ostringstream ss;
-		ss << "FPS: " << fpsCounter.getFPS();
-
+		ss << "FPS: " << fpsCounter.getFps();
 		window.setTitle(ss.str());
-
+		*/
 	}
 
 	return EXIT_SUCCESS;

@@ -1,21 +1,38 @@
 #include "Gui.h"
+#include <sstream>
+#include <iostream>
+#include "Utils.h"
 
 void Gui::loadSettings() {
-	GDifficulty d = (GDifficulty)difficulty->getSelectedItemIndex();
-	Tile::setTheme((TTheme)theme->getSelectedItemIndex());
+	const auto d = GDifficulty(difficulty->getSelectedItemIndex());
+	Tile::setTheme(TTheme(theme->getSelectedItemIndex()));
 	state->diff = d;
 
 	if (d == GDifficulty::custom) {
 		unsigned w, h;
 		std::istringstream iss;
 		iss.str(width->getText().toAnsiString());
-		if (!(iss >> w))
+		if (!(iss >> w)) {
 			w = 24;
+			width->setText("24");
+		}
 
 		iss.str(height->getText().toAnsiString());
 		iss.clear();
-		if (!(iss >> h))
+		if (!(iss >> h)) {
 			h = 30;
+			height->setText("30");
+		}
+
+		if (w > 100) {
+			w = 100;
+			width->setText("100");
+		}
+
+		if (h > 100) {
+			h = 100;
+			height->setText("100");
+		}
 
 		state->size = Vector2u(w, h);
 	}
@@ -24,15 +41,16 @@ void Gui::loadSettings() {
 	resize();
 }
 
-Gui::Gui(MineSweeper * state, sf::RenderWindow* target, std::string guiPath) {
+Gui::Gui(MineSweeper* state, sf::RenderWindow* target, const std::string& guiPath) {
+	resizing = false;
 	gui.setTarget(*target);
 	gui.loadWidgetsFromFile(guiPath);
 
-	// Importing gui pointers
 	this->state = state;
 	this->window = target;
 	winSize = target->getSize();
 
+	// Importing gui pointers
 	// Top Panel
 	topPanel = gui.get<Panel>("TopPanel");
 	mines = gui.get<Label>("Mines");
@@ -59,7 +77,7 @@ Gui::Gui(MineSweeper * state, sf::RenderWindow* target, std::string guiPath) {
 
 	// Reset button
 	reset->setPosition(
-		tgui::bindLeft(openSettings) - tgui::bindSize(reset).x - 8,
+		bindLeft(openSettings) - bindSize(reset).x - 8,
 		"25%"
 	);
 	reset->connect("pressed", [&](MineSweeper* s) {
@@ -68,16 +86,12 @@ Gui::Gui(MineSweeper * state, sf::RenderWindow* target, std::string guiPath) {
 	}, state);
 
 	// Settings button
-	openSettings->connect("pressed", [&]() {
-		settings->setVisible(!settings->isVisible());
-	});
+	openSettings->connect("pressed", [&]() { settings->setVisible(!settings->isVisible()); });
 
 	// Settings window
-	settings->connect("closed", [&]() {
-		settings->setVisible(false);
-	});
+	settings->connect("closed", [&]() { settings->setVisible(false); });
 	difficulty->connect("itemselected", [&]() {
-		if (difficulty->getSelectedItemIndex() == (int)GDifficulty::custom)
+		if (difficulty->getSelectedItemIndex() == int(GDifficulty::custom))
 			customPanel->setVisible(true);
 		else customPanel->setVisible(false);
 	});
@@ -86,23 +100,19 @@ Gui::Gui(MineSweeper * state, sf::RenderWindow* target, std::string guiPath) {
 		settings->setVisible(false);
 		gameOver->setVisible(false);
 	});
-	cancel->connect("pressed", [&]() {
-		settings->setVisible(false);
-	});
+	cancel->connect("pressed", [&]() { settings->setVisible(false); });
 	apply->connect("pressed", [&]() {
 		loadSettings();
 		gameOver->setVisible(false);
 	});
-	difficulty->setSelectedItemByIndex((int)state->diff);
-	theme->setSelectedItemByIndex((int)Tile::theme);
+	difficulty->setSelectedItemByIndex(int(state->diff));
+	theme->setSelectedItemByIndex(int(Tile::theme));
 
 	// GameOver window
-	gameOver->connect("closed", [&]() {
-		gameOver->setVisible(false);
-	});
+	gameOver->connect("closed", [&]() { gameOver->setVisible(false); });
 }
 
-void Gui::handleEvents(const sf::Event & e) {
+void Gui::handleEvents(const Event& e) {
 	if (gui.handleEvent(e))
 		return;
 
@@ -122,9 +132,7 @@ void Gui::handleEvents(const sf::Event & e) {
 		);
 		winSize = window->getSize();
 
-		if (!resizing) {
-			resize();
-		}
+		if (!resizing) { resize(); }
 		else
 			resizing = false;
 	}
@@ -137,33 +145,31 @@ void Gui::handleEvents(const sf::Event & e) {
 		// Position
 		unsigned mx = e.mouseButton.x;
 		unsigned my = e.mouseButton.y;
-		Vector2u size = state->size;
+		const auto size = state->size;
 
 		// Mapping to block pos
-		mx = (unsigned)map(
-			(float)mx,
+		mx = unsigned(map(
+			float(mx),
 			0.0f,
-			(float)winSize.x,
+			float(winSize.x),
 			0.0f,
-			(float)size.x
-		);
-		my = (unsigned)map(
-			(float)my,
+			float(size.x)
+		));
+		my = unsigned(map(
+			float(my),
 			40.0f,
-			(float)winSize.y,
+			float(winSize.y),
 			0.0f,
-			(float)size.y
-		);
+			float(size.y)
+		));
 
 		state->clickOnTile(Vector2u(mx, my), e.mouseButton.button);
 	}
 }
 
-void Gui::setView(sf::View view) {
-	gui.setView(view);
-}
+void Gui::setView(sf::View view) { gui.setView(view); }
 
-void Gui::update() {
+void Gui::update() const {
 	// Check for victory
 	if (state->gState == GState::running)
 		state->checkVictory();
@@ -182,9 +188,9 @@ void Gui::update() {
 
 	// Time
 	if (state->gState == GState::running) {
-		sf::Time t = state->clock.getElapsedTime();
-		int ms = t.asMilliseconds() % 1000;
-		int s = (int)t.asSeconds();
+		const auto t = state->clock.getElapsedTime();
+		const auto ms = t.asMilliseconds() % 1000;
+		const auto s = int(t.asSeconds());
 		ss << s << "." << ms;
 		time->setText(ss.str());
 	}
@@ -204,27 +210,25 @@ void Gui::update() {
 		state->gState = GState::paused;
 		endTime->setText(time->getText());
 	}
-
 }
 
 void Gui::resize() {
-	Vector2u size = state->size;
+	const auto size = state->size;
 
 	if ((winSize.y - 40) % size.y != 0)
 		winSize.y -= (winSize.y - 40) % size.y;
 
-	float w = winSize.x / (float)size.x;
-	float h = (winSize.y - 40) / (float)size.y;
+	const auto h = float(winSize.y - 40) / float(size.y);
 
-	float upp = size.y * 16 / (winSize.y - 40.0f);
-	float offset = upp * 40;
+	const auto upp = float(size.y) * 16 / (winSize.y - 40.0f);
+	const auto offset = upp * 40;
 
-	sf::View v1(sf::FloatRect(0, -offset, (float)size.x * 16, (float)size.y * 16 + offset));
+	const sf::View v1(sf::FloatRect(0, -offset, float(size.x) * 16, float(size.y) * 16 + offset));
 	window->setView(v1);
 
-	winSize.x = (unsigned)(h * size.x);
+	winSize.x = unsigned(h * size.x);
 
-	sf::View v2(sf::FloatRect(0, 0, (float)winSize.x, (float)winSize.y));
+	const sf::View v2(sf::FloatRect(0, 0, float(winSize.x), float(winSize.y)));
 	gui.setView(v2);
 
 	if (winSize.x % size.x != 0)
@@ -240,6 +244,4 @@ void Gui::resize() {
 	resizing = true;
 }
 
-void Gui::draw() {
-	gui.draw();
-}
+void Gui::draw() { gui.draw(); }

@@ -5,7 +5,6 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <random>
-#include <iostream>
 
 using std::vector;
 using sf::Vector2u;
@@ -28,7 +27,7 @@ enum class GState {
 	usingFlare
 };
 
-class MineSweeper {
+class MineSweeper {  // NOLINT(cppcoreguidelines-special-member-functions, hicpp-special-member-functions)
 protected:
 	// Logic
 	vector<vector<Tile*>> tiles;
@@ -42,23 +41,23 @@ protected:
 	void addNeighbours(Tile* t);
 
 	// Graphics
-	sf::Texture tileset;
+	Texture tileset;
 public:
 	sf::Clock clock;
 	Vector2u size;
 	GDifficulty diff;
-	unsigned mineCount;
-	unsigned flagCount;
-	unsigned hiddenCount;
-	unsigned flares;
-	unsigned flareCount;
+	unsigned mineCount{};
+	unsigned flagCount{};
+	unsigned hiddenCount{};
+	unsigned flares{};
+	unsigned flareCount{};
 
 	Tilemap tilemap;
 	GState gState;
 
 	MineSweeper();
-	MineSweeper(std::string assets, GDifficulty diff);
-	MineSweeper(std::string assets, Vector2u customSize);
+	MineSweeper(const std::string& assets, GDifficulty diff);
+	MineSweeper(const std::string& assets, Vector2u customSize);
 	void clickOnTile(Vector2u pos, sf::Mouse::Button button);
 	void checkVictory();
 	void revealMines();

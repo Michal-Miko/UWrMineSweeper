@@ -34,7 +34,7 @@ enum class TType {
 	any
 };
 
-class Tile {
+class Tile {  // NOLINT(cppcoreguidelines-special-member-functions, hicpp-special-member-functions)
 protected:
 	Vector2u tilesetPos;
 public:
@@ -48,33 +48,34 @@ public:
 	const static Vector2u bgPos;
 	static void setTheme(TTheme theme);
 
-	Tile(Vector2u tilesetPos);
+	explicit Tile(Vector2u tilesetPos);
 	Tile(ushort x, ushort y);
+	virtual ~Tile();
 
 	// Neighbours
 	ushort countNearby(TState state, TType type);
 
 	void flag(Tilemap* tm, unsigned* fc);
-	virtual bool clickedOn(Tilemap* tm, unsigned* hc, unsigned* fc) = 0;
+	virtual bool clickedOn(Tilemap* tm, unsigned* hc, unsigned* fc);
 };
 
 class EmptyTile : public Tile {
 protected:
-	ushort nearbyMines;
+	ushort nearbyMines{};
 	void setNearbyMines();
 public:
 	EmptyTile();
-	virtual bool clickedOn(Tilemap* tm, unsigned* hc, unsigned* fc) override;
+	bool clickedOn(Tilemap* tm, unsigned* hc, unsigned* fc) override;
 };
 
-class Mine : public Tile {
+class Mine final : public Tile {
 public:
 	Mine();
-	virtual bool clickedOn(Tilemap* tm, unsigned* hc, unsigned* fc) override;
+	bool clickedOn(Tilemap* tm, unsigned* hc, unsigned* fc) override;
 };
 
-class Flare : public EmptyTile {
+class Flare final : public EmptyTile {
 public:
 	Flare();
-	virtual bool clickedOn(Tilemap* tm, unsigned* hc, unsigned* fc) override;
+	bool clickedOn(Tilemap* tm, unsigned* hc, unsigned* fc) override;
 };

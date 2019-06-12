@@ -38,23 +38,13 @@ set(
 	${PROJECT_SOURCE_DIR}/properties.rc
 )
 
-if (WIN32)
-	add_executable (
-		MineSweeper 
-		WIN32
-		${SOURCEFILES} 
-		${RAPIDXML}
-	)
-endif (WIN32)
-
-if (UNIX)
-	add_executable (
-		MineSweeper 
-		X11
-		${SOURCEFILES} 
-		${RAPIDXML}
-	)
-endif (UNIX)
+add_executable (
+	MineSweeper 
+	WIN32
+	${SOURCEFILES} 
+	${RESOURCEFILES}
+	${RAPIDXML}
+)
 
 # Link SFML, TGUI
 target_link_libraries(MineSweeper sfml-graphics sfml-main tgui)

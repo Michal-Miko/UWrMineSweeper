@@ -35,6 +35,16 @@ rule CXX_COMPILER__MineSweeper
 
 
 #############################################
+# Rule for compiling RC files.
+
+rule RC_COMPILER__MineSweeper
+  depfile = $DEP_FILE
+  deps = gcc
+  command = "C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmcldeps.exe" RC $in $DEP_FILE $out "Note: including file: " "C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/VC/Tools/MSVC/14.16.27023/bin/HostX64/x64/cl.exe" "D:\Windows Kits\10\bin\10.0.16299.0\x64\rc.exe" $DEFINES $INCLUDES $FLAGS /fo$out $in
+  description = Building RC object $out
+
+
+#############################################
 # Rule for linking CXX executable.
 
 rule CXX_EXECUTABLE_LINKER__MineSweeper

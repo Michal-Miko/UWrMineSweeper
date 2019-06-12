@@ -37,22 +37,26 @@ enum class TType {
 class Tile {  // NOLINT(cppcoreguidelines-special-member-functions, hicpp-special-member-functions)
 protected:
 	Vector2u tilesetPos;
-public:
 	vector<Tile*> neighbours;
-	Vector2u boardPos;
-	TType type;
-	TState state;
+public:
+	// Static
 	static TTheme theme;
 	static Vector2u fgPos;
 	static Vector2u flagPos;
 	const static Vector2u bgPos;
 	static void setTheme(TTheme theme);
 
+	// Local
+	TState state;
+	Vector2u boardPos;
+	TType type{};
+
 	explicit Tile(Vector2u tilesetPos);
 	Tile(ushort x, ushort y);
 	virtual ~Tile();
 
 	// Neighbours
+	void addNeighbours(const vector<vector<Tile*>>& tiles, Vector2u size);
 	ushort countNearby(TState state, TType type);
 
 	void flag(Tilemap* tm, unsigned* fc);

@@ -37,9 +37,6 @@ protected:
 	std::random_device dev;
 	std::mt19937 rng;
 
-	// Tiles
-	void addNeighbours(Tile* t);
-
 	// Graphics
 	Texture tileset;
 public:

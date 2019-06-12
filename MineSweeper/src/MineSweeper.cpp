@@ -1,37 +1,5 @@
 #include "MineSweeper.h"
 
-void MineSweeper::addNeighbours(Tile* t) {
-	const auto x = t->boardPos.x;
-	const auto y = t->boardPos.y;
-	vector<Tile*> neighbours;
-	// left
-	if (x > 0)
-		neighbours.push_back(tiles[y][x - 1]);
-	// top left
-	if (x > 0 && y > 0)
-		neighbours.push_back(tiles[y - 1][x - 1]);
-	// top
-	if (y > 0)
-		neighbours.push_back(tiles[y - 1][x]);
-	// top right
-	if (x < size.x - 1 && y > 0)
-		neighbours.push_back(tiles[y - 1][x + 1]);
-	// right
-	if (x < size.x - 1)
-		neighbours.push_back(tiles[y][x + 1]);
-	// bottom right
-	if (x < size.x - 1 && y < size.y - 1)
-		neighbours.push_back(tiles[y + 1][x + 1]);
-	// bottom
-	if (y < size.y - 1)
-		neighbours.push_back(tiles[y + 1][x]);
-	// bottom left
-	if (x > 0 && y < size.y - 1)
-		neighbours.push_back(tiles[y + 1][x - 1]);
-
-	t->neighbours = neighbours;
-}
-
 MineSweeper::MineSweeper() { rng = std::mt19937(dev()); }   // NOLINT
 
 MineSweeper::MineSweeper(const std::string& assets, const GDifficulty diff = GDifficulty::medium) : MineSweeper() {
@@ -146,7 +114,7 @@ void MineSweeper::reset() {
 	for (unsigned i = 0; i < size.y; i++)
 		for (unsigned j = 0; j < size.x; j++) {
 			tiles[i][j]->boardPos = Vector2u(j, i);
-			addNeighbours(tiles[i][j]);
+			tiles[i][j]->addNeighbours(tiles, size);
 		}
 
 	flagCount = 0;

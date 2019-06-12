@@ -89,6 +89,14 @@ build CMakeFiles\MineSweeper.dir\src\Utils.cpp.obj: CXX_COMPILER__MineSweeper ..
   OBJECT_FILE_DIR = CMakeFiles\MineSweeper.dir\src
   TARGET_COMPILE_PDB = CMakeFiles\MineSweeper.dir\
   TARGET_PDB = MineSweeper.pdb
+build CMakeFiles\MineSweeper.dir\properties.rc.res: RC_COMPILER__MineSweeper D$:\Dev\Studia\Github\Michal-Miko\UWrMineSweeper\MineSweeper\properties.rc || cmake_object_order_depends_target_MineSweeper
+  DEP_FILE = CMakeFiles\MineSweeper.dir\properties.rc.res.d
+  FLAGS = /DWIN32
+  INCLUDES = -ID:\Dev\Studia\Github\Michal-Miko\UWrMineSweeper\MineSweeper\extlibs\SFML-2.5.1\include -ID:\Dev\Studia\Github\Michal-Miko\UWrMineSweeper\MineSweeper\extlibs\TGUI-0.8\include
+  OBJECT_DIR = CMakeFiles\MineSweeper.dir
+  OBJECT_FILE_DIR = CMakeFiles\MineSweeper.dir
+  TARGET_COMPILE_PDB = CMakeFiles\MineSweeper.dir\
+  TARGET_PDB = MineSweeper.pdb
 
 # =============================================================================
 # Link build statements for EXECUTABLE target MineSweeper
@@ -97,7 +105,7 @@ build CMakeFiles\MineSweeper.dir\src\Utils.cpp.obj: CXX_COMPILER__MineSweeper ..
 #############################################
 # Link the executable MineSweeper.exe
 
-build MineSweeper.exe: CXX_EXECUTABLE_LINKER__MineSweeper CMakeFiles\MineSweeper.dir\src\Main.cpp.obj CMakeFiles\MineSweeper.dir\src\MineSweeper.cpp.obj CMakeFiles\MineSweeper.dir\src\Gui.cpp.obj CMakeFiles\MineSweeper.dir\src\Tiles.cpp.obj CMakeFiles\MineSweeper.dir\src\Tilemap.cpp.obj CMakeFiles\MineSweeper.dir\src\Utils.cpp.obj | ..\..\extlibs\SFML-2.5.1\lib\sfml-graphics.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-main.lib ..\..\extlibs\TGUI-0.8\lib\tgui.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-window.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-system.lib
+build MineSweeper.exe: CXX_EXECUTABLE_LINKER__MineSweeper CMakeFiles\MineSweeper.dir\src\Main.cpp.obj CMakeFiles\MineSweeper.dir\src\MineSweeper.cpp.obj CMakeFiles\MineSweeper.dir\src\Gui.cpp.obj CMakeFiles\MineSweeper.dir\src\Tiles.cpp.obj CMakeFiles\MineSweeper.dir\src\Tilemap.cpp.obj CMakeFiles\MineSweeper.dir\src\Utils.cpp.obj CMakeFiles\MineSweeper.dir\properties.rc.res | ..\..\extlibs\SFML-2.5.1\lib\sfml-graphics.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-main.lib ..\..\extlibs\TGUI-0.8\lib\tgui.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-window.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-system.lib
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG
   LINK_FLAGS = /machine:x64 /INCREMENTAL:NO /subsystem:windows
   LINK_LIBRARIES = ..\..\extlibs\SFML-2.5.1\lib\sfml-graphics.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-main.lib ..\..\extlibs\TGUI-0.8\lib\tgui.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-window.lib ..\..\extlibs\SFML-2.5.1\lib\sfml-system.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib

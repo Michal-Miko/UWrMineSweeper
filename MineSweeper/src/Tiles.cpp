@@ -13,11 +13,40 @@ void Tile::setTheme(TTheme theme) {
 	flagPos.y = ceil(int(theme) / 4) + 2;
 }
 
-Tile::Tile(const Vector2u tilesetPos) : tilesetPos(tilesetPos), type(), state() {}
+Tile::Tile(const Vector2u tilesetPos) : tilesetPos(tilesetPos), state() {}
 
-Tile::Tile(const ushort x, const ushort y) : tilesetPos(x, y), type(), state() {}
+Tile::Tile(const ushort x, const ushort y) : tilesetPos(x, y), state() {}
 
 Tile::~Tile() = default;
+void Tile::addNeighbours(const vector<vector<Tile*>>& tiles, const Vector2u size) {
+	const auto x = boardPos.x;
+	const auto y = boardPos.y;
+
+	// left
+	if (x > 0)
+		neighbours.push_back(tiles[y][x - 1]);
+	// top left
+	if (x > 0 && y > 0)
+		neighbours.push_back(tiles[y - 1][x - 1]);
+	// top
+	if (y > 0)
+		neighbours.push_back(tiles[y - 1][x]);
+	// top right
+	if (x < size.x - 1 && y > 0)
+		neighbours.push_back(tiles[y - 1][x + 1]);
+	// right
+	if (x < size.x - 1)
+		neighbours.push_back(tiles[y][x + 1]);
+	// bottom right
+	if (x < size.x - 1 && y < size.y - 1)
+		neighbours.push_back(tiles[y + 1][x + 1]);
+	// bottom
+	if (y < size.y - 1)
+		neighbours.push_back(tiles[y + 1][x]);
+	// bottom left
+	if (x > 0 && y < size.y - 1)
+		neighbours.push_back(tiles[y + 1][x - 1]);
+}
 
 ushort Tile::countNearby(const TState state, const TType type) {
 	ushort count = 0;

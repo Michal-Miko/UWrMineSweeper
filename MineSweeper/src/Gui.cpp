@@ -12,15 +12,15 @@ void Gui::loadSettings() {
 		unsigned w, h;
 		std::istringstream iss;
 		iss.str(width->getText().toAnsiString());
-		if (!(iss >> w)) {
-			w = 24;
+		if (!(iss >> w) || w < 0) {
+			w = 8;
 			width->setText("24");
 		}
 
 		iss.str(height->getText().toAnsiString());
 		iss.clear();
-		if (!(iss >> h)) {
-			h = 30;
+		if (!(iss >> h) || h < 0) {
+			h = 8;
 			height->setText("30");
 		}
 
@@ -86,10 +86,16 @@ Gui::Gui(MineSweeper* state, sf::RenderWindow* target, const std::string& guiPat
 	}, state);
 
 	// Settings button
-	openSettings->connect("pressed", [&]() { settings->setVisible(!settings->isVisible()); });
+	openSettings->connect(
+		"pressed",
+		[&]() { settings->setVisible(!settings->isVisible()); }
+	);
 
 	// Settings window
-	settings->connect("closed", [&]() { settings->setVisible(false); });
+	settings->connect(
+		"closed",
+		[&]() { settings->setVisible(false); }
+	);
 	difficulty->connect("itemselected", [&]() {
 		if (difficulty->getSelectedItemIndex() == int(GDifficulty::custom))
 			customPanel->setVisible(true);
@@ -122,7 +128,7 @@ void Gui::handleEvents(const Event& e) {
 	}
 
 	if (e.type == Event::Resized) {
-		std::cout << "Window resized:\n";
+		std::clog << "Window resized:\n";
 		std::printf(
 			"[%u,%u] => [%u,%u])\n",
 			winSize.x,
@@ -132,7 +138,8 @@ void Gui::handleEvents(const Event& e) {
 		);
 		winSize = window->getSize();
 
-		if (!resizing) { resize(); }
+		if (!resizing)
+			resize();
 		else
 			resizing = false;
 	}
@@ -140,8 +147,7 @@ void Gui::handleEvents(const Event& e) {
 	if (state->gState == GState::paused)
 		return;
 
-	if (e.type == Event::MouseButtonPressed &&
-		e.mouseButton.y >= 40) {
+	if (e.type == Event::MouseButtonPressed && e.mouseButton.y >= 40) {
 		// Position
 		unsigned mx = e.mouseButton.x;
 		unsigned my = e.mouseButton.y;
@@ -167,7 +173,7 @@ void Gui::handleEvents(const Event& e) {
 	}
 }
 
-void Gui::setView(sf::View view) { gui.setView(view); }
+void Gui::setView(const sf::View view) { gui.setView(view); }
 
 void Gui::update() const {
 	// Check for victory
@@ -220,15 +226,25 @@ void Gui::resize() {
 
 	const auto h = float(winSize.y - 40) / float(size.y);
 
-	const auto upp = float(size.y) * 16 / (winSize.y - 40.0f);
-	const auto offset = upp * 40;
+	const auto unitsPerPixel = float(size.y) * 16 / (winSize.y - 40.0f);
+	const auto offset = unitsPerPixel * 40;
 
-	const sf::View v1(sf::FloatRect(0, -offset, float(size.x) * 16, float(size.y) * 16 + offset));
+	const sf::View v1(sf::FloatRect(
+		0,
+		-offset,
+		float(size.x) * 16,
+		float(size.y) * 16 + offset
+	));
 	window->setView(v1);
 
 	winSize.x = unsigned(h * size.x);
 
-	const sf::View v2(sf::FloatRect(0, 0, float(winSize.x), float(winSize.y)));
+	const sf::View v2(sf::FloatRect(
+		0,
+		0,
+		float(winSize.x),
+		float(winSize.y)
+	));
 	gui.setView(v2);
 
 	if (winSize.x % size.x != 0)

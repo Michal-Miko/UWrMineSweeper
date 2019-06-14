@@ -4,7 +4,8 @@
 #include "MineSweeper.h"
 #include "Tiles.h"
 
-typedef tgui::Gui TGui;
+// ReSharper disable once CppInconsistentNaming
+using TGui = tgui::Gui;
 using tgui::Panel;
 using tgui::Label;
 using tgui::Button;

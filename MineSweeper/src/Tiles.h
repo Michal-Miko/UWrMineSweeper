@@ -41,9 +41,8 @@ protected:
 public:
 	// Static
 	static TTheme theme;
-	static Vector2u fgPos;
-	static Vector2u flagPos;
-	const static Vector2u bgPos;
+	static Vector2u texPos;
+	static Vector2u flagTexPos;
 	static void setTheme(TTheme theme);
 
 	// Local

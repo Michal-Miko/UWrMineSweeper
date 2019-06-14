@@ -22,7 +22,7 @@ Tilemap::Tilemap(
 			changeTile(Vector2u(x, y), texPos);
 }
 
-void Tilemap::changeTile(Vector2u tilePos, Vector2f newTexPos) {
+void Tilemap::changeTile(const Vector2u tilePos, const Vector2f newTexPos) {
 	const auto quad = &vertices[(tilePos.y * size.x + tilePos.x) * 4];
 
 	const auto px = floor(float(tilePos.x));

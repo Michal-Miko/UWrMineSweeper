@@ -1,16 +1,15 @@
 #include "Tiles.h"
 
 TTheme Tile::theme = TTheme::black;
-Vector2u Tile::fgPos = Vector2u(2 * int(theme), 2);
-Vector2u Tile::flagPos = Vector2u(2 * int(theme) + 1, 2);
-const Vector2u Tile::bgPos = Vector2u(0, 1);
+Vector2u Tile::texPos = Vector2u(2 * int(theme), 2);
+Vector2u Tile::flagTexPos = Vector2u(2 * int(theme) + 1, 2);
 
 void Tile::setTheme(TTheme theme) {
 	Tile::theme = theme;
-	fgPos.x = 2 * (int(theme) % 4);
-	fgPos.y = ceil(int(theme) / 4) + 2;
-	flagPos.x = fgPos.x + 1;
-	flagPos.y = ceil(int(theme) / 4) + 2;
+	texPos.x = 2 * (int(theme) % 4);
+	texPos.y = ceil(int(theme) / 4) + 2;
+	flagTexPos.x = texPos.x + 1;
+	flagTexPos.y = texPos.y;
 }
 
 Tile::Tile(const Vector2u tilesetPos) : tilesetPos(tilesetPos), state() {}
@@ -64,7 +63,7 @@ void Tile::flag(Tilemap* tm, unsigned* fc) {
 	if (state == TState::hidden) {
 		tm->changeTile(
 			Vector2u(boardPos.x, boardPos.y),
-			Vector2f(flagPos)
+			Vector2f(flagTexPos)
 		);
 		(*fc)++;
 		state = TState::flagged;
@@ -72,7 +71,7 @@ void Tile::flag(Tilemap* tm, unsigned* fc) {
 	else if (state == TState::flagged) {
 		tm->changeTile(
 			Vector2u(boardPos.x, boardPos.y),
-			Vector2f(fgPos)
+			Vector2f(texPos)
 		);
 		(*fc)--;
 		state = TState::hidden;
@@ -143,6 +142,7 @@ Flare::Flare() {
 	type = TType::flare;
 }
 
+// Return true if clicked on a mine, false otherwise
 bool Flare::clickedOn(Tilemap* tm, unsigned* hc, unsigned* fc) {
 	if (state == TState::hidden) {
 		setNearbyMines();

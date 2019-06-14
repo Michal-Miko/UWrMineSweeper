@@ -21,7 +21,7 @@ MineSweeper::MineSweeper(const std::string& assets, const Vector2u customSize) :
 	size = customSize;
 }
 
-void MineSweeper::clickOnTile(Vector2u pos, sf::Mouse::Button button) {
+void MineSweeper::clickOnTile(const Vector2u pos, const sf::Mouse::Button button) {
 	if (button == sf::Mouse::Left) {
 		if (tiles[pos.y][pos.x]->clickedOn(&tilemap, &hiddenCount, &flagCount))
 			gState = GState::loss;
@@ -121,7 +121,7 @@ void MineSweeper::reset() {
 
 	// Graphics
 	tileset.loadFromFile(assets + "tilemap.png");
-	tilemap = Tilemap(tileset, size, 16, 16, Vector2f(Tile::fgPos));
+	tilemap = Tilemap(tileset, size, 16, 16, Vector2f(Tile::texPos));
 
 	// Clock
 	clock.restart();

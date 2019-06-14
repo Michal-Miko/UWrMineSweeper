@@ -2,25 +2,6 @@
 # make sure everything from extlibs gets included 
 !MineSweeper/extlibs
 
-# include required dlls
-MineSweeper/build/*
-
-!MineSweeper/build/x64-Release/
-!MineSweeper/build/x64-Debug/
-
-MineSweeper/build/x64-Release/*
-MineSweeper/build/x64-Debug/*
-
-!MineSweeper/build/x64-Release/*.dll
-!MineSweeper/build/x64-Debug/*.dll
-
-
-!MineSweeper/build/x64-Debug/resources
-!MineSweeper/build/x64-Debug/themes
-
-!MineSweeper/build/x64-Debug/resources
-!MineSweeper/build/x64-Debug/themes
-
 Docs/uml
 
 *.ninja_log
@@ -429,3 +410,16 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 git 
+
+
+# include required dlls
+MineSweeper/build/*
+
+!MineSweeper/build/x64-Release/
+!MineSweeper/build/x64-Debug/
+
+MineSweeper/build/x64-Release/*
+MineSweeper/build/x64-Debug/*
+
+!MineSweeper/build/x64-Release/*.dll
+!MineSweeper/build/x64-Debug/*.dll
